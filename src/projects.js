@@ -4,15 +4,18 @@ export const projects = [
 		'name': 'Wagsworth Grooming',
 		'url': 'https://eggborne.com/wag',
 		'repo': 'https://github.com/eggborne/wagsworth',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'React'
 		],
 		'descriptionBullets': [
-			'Fast-paced typing game',
-			'Requires landscape mode and physical keyboard'
+			'Website for Wagsworth Grooming in Lake Oswego, Oregon'
 		],
-		'screenshots': ['https://eggborne.com/img/punchouttitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/wagsworthscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/wagsworthscreenp2.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/wagsworthscreend1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/wagsworthscreend1.jpg']
+		},
 		iconUrl: 'https://wagsworthgrooming.com/favicon.ico'
 	},
 	{
@@ -27,10 +30,13 @@ export const projects = [
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Fast-paced typing game',
-			'Requires landscape mode and physical keyboard'
+			'A Bingo game I made for my mom to play'
 		],
-		'screenshots': ['https://eggborne.com/img/frtitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/chickenbingoscreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/chickenbingoscreend2.jpg', 'https://eggborne.com/screenshots/portrait/chickenbingoscreend1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/chickenbingoscreend1.jpg']
+		},
 		iconUrl: 'https://chicken.bingo/favicon.ico'
 	},
 	{
@@ -38,17 +44,20 @@ export const projects = [
 		'name': 'Pazaak.online',
 		'url': 'https://pazaak.online',
 		'repo': 'https://github.com/eggborne/pazaak',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'React',
 			'PHP',
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Fast-paced typing game',
-			'Requires landscape mode and physical keyboard'
+			'The card game from Star Wars'
 		],
-		'screenshots': ['https://eggborne.com/img/metroidtitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/pazaakscreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg'],
+			desktop: ['https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg']
+		},
 		iconUrl: 'https://pazaak.online/dist/favicon.png'
 	},
 	{
@@ -56,17 +65,20 @@ export const projects = [
 		'name': 'Customizable Name Generator',
 		'url': 'https://www.eggborne.com/namegenerator',
 		'repo': 'https://github.com/eggborne/customizable-name-generator',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'React',
 			'PHP',
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Fast-paced typing game',
-			'Requires landscape mode and physical keyboard'
+			'Generates random names according to user-specified rules'
 		],
-		'screenshots': ['https://eggborne.com/img/frtitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/namegeneratortitlep.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/namegeneratortitled.png'],
+			desktop: ['https://eggborne.com/screenshots/desktop/namegeneratortitled.png']
+		},
 		iconUrl: 'https://eggborne.com/namegenerator/favicon.png'
 	},
 	{
@@ -81,35 +93,42 @@ export const projects = [
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Procedurally generated NES Metroid',
-			'Dynamic multi-level loading system ensures optimum framerate regardless of map size'
+			'A gritty sequel to the 1984 NES classic'
 		],
-		'screenshots': ['https://eggborne.com/img/metroidtitle.png'],
-		iconUrl: 'https://eggborne.com/icons/kficon.png'
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/kungfuscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/kungfutitlep.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/kungfutitled.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/kungfuscreend1.jpg']
+		},
+		iconUrl: 'https://brutalkungfu.com/favicon.png'
 	},
 	{
 		'id': 5,
 		'name': 'Tetro',
 		'url': 'https://eggborne.com/tetro',
 		'repo': 'https://github.com/eggborne/tetro',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'PixiJS',
 			'PHP',
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Mobile-optimized recreation of the original NES Tetris with new features and game modes',
+			'NES Tetris with new features and game modes',
 		],
-		'screenshots': ['https://eggborne.com/img/tetrotitle.png'],
-		iconUrl: 'https://eggborne.com/icons/tetrisicon.bmp'
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/tetroscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/tetrotitlep.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/tetrotitled.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/tetroscreend1.jpg', 'https://eggborne.com/screenshots/desktop/tetrotitled.jpg']
+		},
+		iconUrl: 'https://eggborne.com/tetro/favicon.bmp'
 	},
 	{
 		'id': 6,
 		'name': 'Frog Racer 2019',
 		'url': 'https://eggborne.com/frogracer',
 		'repo': 'https://github.com/eggborne/frog-racer',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'PixiJS',
 			'PHP',
@@ -117,25 +136,31 @@ export const projects = [
 		],
 		'descriptionBullets': [
 			'Endless randomized Battletoads Turbo Tunnel level',
-			'Split-screen mobile touch control interface',
 		],
-		'screenshots': ['https://eggborne.com/img/frtitle.png'],
-		iconUrl: 'https://eggborne.com/icons/frogracericon.png'
+		'screenshots': {
+			portrait: ['https://eggborne.com/frogracer/assets/screenshot1.png'],
+			landscape: ['https://eggborne.com/frogracer/assets/screenshot2.png'],
+			desktop: ['https://eggborne.com/frogracer/assets/screenshot2.png']
+		},
+		iconUrl: 'https://eggborne.com/frogracer/assets/favicon-med.png'
 	},
 	{
 		'id': 7,
 		'name': 'Random Metroid',
 		'url': 'https://eggborne.com/metroid',
 		'repo': 'https://github.com/eggborne/random-metroid',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'PixiJS'
 		],
 		'descriptionBullets': [
-			'Procedurally generated NES Metroid',
-			'Dynamic multi-level loading system ensures optimum framerate regardless of map size'
+			'Randomly generated NES Metroid',
 		],
-		'screenshots': ['https://eggborne.com/img/metroidtitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/metroidscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/metroidtitlep.jpg'],
+			landscape: ['https://eggborne.com/screenshots/landscape/metroidscreenl1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/metroidtitled.jpg']
+		},
 		iconUrl: 'https://eggborne.com/icons/metroidicon.png'
 	},
 	{
@@ -143,15 +168,18 @@ export const projects = [
 		'name': 'Cellular Automata Sandbox',
 		'url': 'https://eggborne.com/tca',
 		'repo': 'https://github.com/eggborne/cellular-automata-sandbox',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'PixiJS'
 		],
 		'descriptionBullets': [
-			"Creates cool 3D designs using procedural generation",
-			"Highly customizable in appearance and logic"
+			"Creates cool quasi-3D designs using procedural generation",
 		],
-		'screenshots': ['https://eggborne.com/img/castitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/casscreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/desktop/casscreend1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/desktop/casscreend1.jpg']
+		},
 		iconUrl: 'https://eggborne.com/icons/casicon.png'
 	},
 	{
@@ -159,15 +187,18 @@ export const projects = [
 		'name': 'Toad\'s Odyssey',
 		'url': 'https://eggborne.com/toad',
 		'repo': 'https://github.com/eggborne/toad-game',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'PixiJS'
 		],
 		'descriptionBullets': [
-			"Creates cool 3D designs using procedural generation",
-			"Highly customizable in appearance and logic"
+			"A narrative platforming adventure starring Super Mario's Toad"
 		],
-		'screenshots': ['https://eggborne.com/img/castitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/toadgamescreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/landscape/toadgamescreenl1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/landscape/toadgamescreenl1.jpg']
+		},
 		iconUrl: 'https://eggborne.com/icons/toadicon.png'
 	},
 	
@@ -176,7 +207,7 @@ export const projects = [
 		'name': 'Donald Trump\'s Punch-Out',
 		'url': 'https://eggborne.com/punchout',
 		'repo': 'https://github.com/eggborne/donald-trump-punch-out',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'React',
 			'PHP',
@@ -184,9 +215,12 @@ export const projects = [
 		],
 		'descriptionBullets': [
 			'Mike Tyson\'s Punch-Out except you beat up Trump',
-			'Makes you feel better temporarily'
 		],
-		'screenshots': ['https://eggborne.com/img/punchouttitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/punchoutscreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/landscape/punchoutscreenl1.jpg'],
+			desktop: ['https://eggborne.com/img/punchouttitle.png'],
+		},
 		iconUrl: 'https://eggborne.com/icons/boxinggloveicon.png'
 	},
 	{
@@ -194,35 +228,42 @@ export const projects = [
 		'name': 'Egg Protector',
 		'url': 'https://eggborne.com/eggprotector',
 		'repo': 'https://github.com/eggborne/egg-protector',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
+		'description': '',
 		'technologies': [
 			'React',
 			'PHP',
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Missile Command/tower defense mashup with a biological twist'
+			'A fast-paced Missile Command/tower defense mashup'
 		],
-		'screenshots': ['https://eggborne.com/img/punchouttitle.png'],
+		'screenshots': {
+			portrait: ['https://eggborne.com/screenshots/portrait/eggprotectorscreenp1.jpg'],
+			landscape: ['https://eggborne.com/screenshots/landscape/eggprotectorscreenl1.jpg'],
+			desktop: ['https://eggborne.com/screenshots/landscape/eggprotectorscreenl1.jpg']
+		},
 		iconUrl: 'https://eggborne.com/icons/fetusicon.png'
 	},
-	{
-		'id': 10,
-		'name': 'Sperm Typer',
-		'url': 'https://eggborne.com/spermtyper',
-		'repo': 'https://github.com/eggborne/sperm-typer',
-		'description': 'Cock cock cock cock cock balls ass balls rectum cock balls ass',
-		'technologies': [
-			'React',
-			'PHP',
-			'MySQL'
-		],
-		'descriptionBullets': [
-			'Fast-paced typing game',
-			'Requires landscape mode and physical keyboard'
-		],
-		'screenshots': ['https://eggborne.com/img/punchouttitle.png'],
-		iconUrl: 'https://eggborne.com/icons/spermtypericon.png'
-	},
-
+	// {
+	// 	'id': 10,
+	// 	'name': 'Sperm Typer',
+	// 	'url': 'https://eggborne.com/spermtyper',
+	// 	'repo': 'https://github.com/eggborne/sperm-typer',
+	// 	'description': '',
+	// 	'technologies': [
+	// 		'React',
+	// 		'PHP',
+	// 		'MySQL'
+	// 	],
+	// 	'descriptionBullets': [
+	// 		'Fast-paced typing game',
+	// 		'Requires landscape mode and physical keyboard'
+	// 	],
+	// 	'screenshots': {
+	// 		portrait: [],
+	// 		landscape: [],
+	// 		desktop: []
+	// 	},
+	// 	iconUrl: 'https://eggborne.com/icons/spermtypericon.png'
+	// },
 ];

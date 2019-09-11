@@ -42,12 +42,11 @@ ul {
   align-items: stretch;
 }
 #project-list {
-	/* margin: var(--header-height) var(--main-padding) var(--pane-spacing) var(--main-padding); */
 	margin-top: var(--header-height);
 	display: grid;
 	grid-template-columns: 100%;
-	grid-template-rows: 
-	repeat(12, var(--pane-height)) calc(var(--pane-height) - var(--footer-height));
+	/* grid-template-rows: repeat(12, var(--pane-height)) calc(var(--pane-height) - var(--footer-height)); */
+	grid-template-rows: min-content;
 	align-items: center;
 	justify-items: center;
 }

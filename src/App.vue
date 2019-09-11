@@ -24,13 +24,14 @@ export default {
 <style>
 :root {
   --view-height: 100vh;
-  --header-height: calc(var(--view-height) * 0.06);
+  --header-height: calc(var(--view-height) * 0.07);
   --footer-height: calc(var(--view-height) * 0.09);
   --main-padding: 3vmin;
   --pane-height: calc(var(--view-height) - var(--header-height));
   --pane-spacing: calc(var(--main-padding) * 2);
   --main-text-color: #eee;
-  --screenshot-width: 70vw;
+  --screenshot-width: 65vw;
+  --phone-height: calc(var(--screenshot-width) / 1.5);
 } 
 * {
   box-sizing: border-box;
@@ -41,6 +42,7 @@ body {
 }
 h2, h3 {
   margin: 0;
+  padding: 0;
 }
 header, footer {
   align-self: stretch;
@@ -65,5 +67,14 @@ header, footer {
   display: grid;
   grid-template-rows: 1fr var(--footer-height);
   font-weight: bold; 
+}
+@media (orientation: landscape) {
+	:root {
+		--screenshot-width: 40vw;
+	}
+	.body-pane {
+		width: 60vw;
+	}
+	
 }
 </style>
