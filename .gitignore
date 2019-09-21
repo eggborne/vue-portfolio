@@ -22,3 +22,4 @@ yarn-error.log*
 src/.htaccess
 deploy.sh
 converttowebp.sh
+src/assets/screenshots

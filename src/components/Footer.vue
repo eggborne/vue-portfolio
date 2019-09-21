@@ -16,6 +16,6 @@ export default {
 <style scoped>
   #page-footer {
     justify-content: center;
-    font-weight: normal;
+    align-self: stretch;
   }
 </style>

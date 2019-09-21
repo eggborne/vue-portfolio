@@ -29,7 +29,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": 0,
+      "no-magic-numbers": 1
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

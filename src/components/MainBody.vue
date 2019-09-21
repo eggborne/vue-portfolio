@@ -1,56 +1,74 @@
 <template>
-  <div id='main-body'>
-		<div id='project-list'>
+	<div id="main-body">
+		<transition name='fade'>
+		<div v-if='loaded' id="project-list">
 			<BodyPane
-				v-for='proj in projects'
-				v-bind:project='proj'
-				v-bind:key='proj.id'
-			/>							
+				v-for="(proj, i) in projects"
+				v-bind:key="proj.id"
+				v-bind:project="proj"
+				v-bind:index="i"
+				v-bind:observer='scrollObserver'
+				v-bind:menuOn='!menuOn'
+			/>
 		</div>
-  </div>
+		</transition>
+		<Header v-if='true' v-bind:projects='projects' v-bind:toggleMenu='toggleMenu' v-bind:menuOn='menuOn' v-bind:titleText='`web projects of Mike Donovan`' />
+	</div>
 </template>
 
 <script>
-import { projects }  from '../projects.js';
 import BodyPane from './BodyPane.vue';
+import Header from './Header.vue';
 
-let projectArray = [];
+window.HEADER_HEIGHT =
+	window.innerWidth < window.innerHeight
+		? window.innerWidth * 0.16 - window.innerHeight * 0.01
+		: window.innerHeight * 0.12 - window.innerWidth * 0.01;
+window.MAIN_PADDING = window.HEADER_HEIGHT / 5.5;
+console.log('h', window.HEADER_HEIGHT);
+console.log('mp', window.MAIN_PADDING);
 
-const display_project = () => {
-	console.log('this', this)
-}
-
-export default {	
-	data: function() {return {projects: projects}},
-  name: 'MainBody',
-  props: {
-    msg: String
+export default {
+	name: 'MainBody',
+	data: () => ({
+		scrollObserver: null,
+		intersected: false,
+		panesShowing: [],
+		loaded: false
+	}),
+	props: {
+		msg: String,
+		projects: Array,
+		menuOn: Boolean,
+		toggleMenu: Function,
+		landscape: Boolean
 	},
 	components: {
-		BodyPane
+		BodyPane,
+		Header
+	},
+	mounted() {
+		this.loaded = true
 	}
 };
 </script>
 
 <style scoped>
 ul {
-  list-style: none;
+	list-style: none;
 }
 #main-body {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-#project-list {
-	margin-top: var(--header-height);
-	display: grid;
-	grid-template-columns: 100%;
-	/* grid-template-rows: repeat(12, var(--pane-height)) calc(var(--pane-height) - var(--footer-height)); */
-	grid-template-rows: min-content;
+	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-items: center;
+	padding: var(--main-padding);
+	width: 100vw;
+	
 }
-#project-list > * {
-	/* outline: 1px solid red; */
+
+@media screen and (orientation: landscape) {
+	#main-body {
+		width: var(--main-column-width);
+	}
 }
 </style>

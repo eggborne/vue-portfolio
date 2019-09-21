@@ -1,0 +1,34 @@
+<template>
+  <div class='tech-tag'>
+    {{ tech }}
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Header',
+  props: {
+    tech: String
+  },
+	components: {
+		
+	}
+}
+</script>
+
+<style scoped>
+  .tech-tag {
+		height: calc(var(--header-height) / 2.5);
+    display: flex;
+    justify-content: center;
+		align-items: center;
+    font-size: calc(var(--main-font-size) * 1.1);
+		padding: 0 1em;
+    border-radius: calc(var(--inner-padding) / 2);
+    background-color: #070;
+    color: white;
+    text-shadow: 0px 1px 1px black;
+    margin-right: 0.5em;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0);
+  }
+</style>
