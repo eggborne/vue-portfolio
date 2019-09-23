@@ -1,13 +1,19 @@
 <template>
   <div id='app'>
     <div id='header-space'></div>
-    <!-- <Header v-if='!landscape' v-bind:toggleMenu='toggleMenu' v-bind:menuOn='menuOn' v-bind:titleText='titleText' /> -->
-    <MainBody v-bind:landscape='landscape' v-bind:toggleMenu='toggleMenu' v-bind:projects='projects' v-bind:menuOn='menuOn' />
+    <Header 
+			:projects='projects' 
+			:toggleMenu='toggleMenu' 
+			:menuOn='menuOn' 
+			:titleText='`web projects of Mike Donovan`'
+		/>
+    <!-- <Header v-if='!landscape' :toggleMenu='toggleMenu' :menuOn='menuOn' :titleText='titleText' /> -->
+    <MainBody :landscape='landscape' :toggleMenu='toggleMenu' :projects='projects' :menuOn='menuOn' />
     <Footer msg='Footer'/>
     <!-- <transition name='slide'>	
       <Menu 
-        v-bind:toggleMenu='toggleMenu' 
-        v-bind:projects='projects' 
+        :toggleMenu='toggleMenu' 
+        :projects='projects' 
         v-if='menuOn' 
       />
     </transition> -->
@@ -46,6 +52,15 @@ export default {
   },
   created: function() {
     this.landscape = window.innerWidth > window.innerHeight;
+    window.HEADER_HEIGHT =
+      window.innerWidth < window.innerHeight
+        ? Math.round(window.innerWidth * 0.16 - window.innerHeight * 0.01)
+        : Math.round(window.innerHeight * 0.12 - window.innerWidth * 0.01);
+    window.MAIN_PADDING = Math.round(window.HEADER_HEIGHT / 5.5);
+    console.log('h', window.HEADER_HEIGHT);
+    console.log('mp', window.MAIN_PADDING);
+    document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
+    document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
     // this.titleText = (window.innerWidth / window.innerHeight).toPrecision(3);
     // window.addEventListener('resize', () => {
     //   this.titleText = (window.innerWidth / window.innerHeight).toPrecision(3);
@@ -56,28 +71,28 @@ export default {
 
 <style>
 :root {
-  --view-height: 100vh;
-  --main-column-width: calc(var(--screenshot-area-height) * 3.3);
+  --view-height: 100vh;  
   /* --header-height: calc(var(--view-height) * 0.08); */
-  --header-height: calc(16vw - 1vh);
-  --footer-height: calc(var(--view-height) * 0.09);
+  --header-height: calc(16vmin - 1vmax);
+  /* --footer-height: calc(var(--view-height) * 0.09); */
+  --footer-height: var(--header-height);
   /* --main-padding: 3vmin; */
   --main-padding: calc(var(--header-height) / 5.5);
   --inner-padding: calc(var(--main-padding) / 2);
   --pane-height: calc(var(--view-height) - var(--header-height) - (var(--main-padding) * 2.5));
   --pane-spacing: calc(var(--main-padding) * 2);
   --main-text-color: #d8d8d8;
-  --pane-bg-color: rgb(116, 112, 105);
+  --pane-bg-color: rgb(70, 66, 60);
   --desktop-ratio: 0.5625;
   --tablet-ratio: 0.75;
   --tablet-ratio: 0.625;
-  --portrait-ratio: 0.5;
+  --portrait-ratio: 0.5625;
   --screenshot-area-height: 80vw;
   --screenshot-width: 60vw;
   --screenshot-height: calc(var(--screenshot-width) * var(--desktop-ratio));
 
   --phone-screenshot-height: calc(var(--screenshot-height) * 1.3);  
-	--phone-screenshot-width: calc(var(--phone-screenshot-height) * (var(--desktop-ratio)));
+	--phone-screenshot-width: calc(var(--phone-screenshot-height) * (var(--portrait-ratio)));
 	--phone-width: calc(var(--phone-screenshot-width) * 1.035);
 	--phone-height: calc(var(--phone-screenshot-height) * 1.2);
 	--monitor-width: calc(var(--screenshot-width) * 1.06);
@@ -91,6 +106,8 @@ export default {
 
   --main-font-size: calc((var(--header-height) / 16) + 0.4rem);
   --title-font-size: calc((var(--header-height) / 5) + 0.4rem);
+
+  /* --main-column-width: calc(100vw - (var(--main-padding) * 2)); */
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
@@ -112,7 +129,9 @@ export default {
 }
 body {
   margin: 0;
-  background: #222;    
+  background: rgb(50, 59, 50);
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
 }
 /* body::after {
   position: fixed;
@@ -139,13 +158,13 @@ body {
 	height: calc(var(--view-height) - var(--header-height));
 	background-color: #000000ee;
   z-index: 2;
-	transition: all 320ms ease;
+	/* transition: all 320ms ease; */
   display: none;
 }
 header, footer {
   display: flex;
   align-items: center;
-  background: #111;
+  /* background: #111; */
   /* width: 100%; */
 }
 #app {
@@ -163,26 +182,27 @@ header, footer {
   grid-template-rows: var(--header-height) 1fr var(--footer-height);
   scroll-padding-top: calc(var(--header-height) + (var(--main-padding)));
   overflow-y: auto;
-  overflow-x: hidden;
   justify-content: center;
   align-items: center;
 }
 #project-list {
 	display: grid;
-	grid-row-gap: var(--pane-spacing);
+	grid-row-gap: calc(var(--pane-spacing) * 1);
 	grid-column-gap: var(--pane-spacing);
   transition: opacity 600ms ease;
+  padding: var(--pane-spacing) 0;
 }
 @media (orientation: landscape) {
-	:root {
-    --header-height: calc(5vh + 2vw);
+	:root {    
+    --header-height: calc(16vw - 1vh);
+    --main-column-width: calc(var(--screenshot-area-height) * 3.3);
     --screenshot-area-height: calc(var(--header-height) * 4);
     --screenshot-height: calc(var(--screenshot-area-height) / 2.35);
     --screenshot-width: calc(var(--screenshot-height) / var(--desktop-ratio));
     --pane-height: calc(var(--view-height) - var(--header-height) - (var(--pane-spacing) * 2));
 	}
   .slide-enter {
-	transform: translateY(-100%);
+	  transform: translateY(-100%);
   }
   .slide-enter-to {
     transform: translateY(0%);
@@ -196,9 +216,9 @@ header, footer {
   #project-list {
     grid-template-columns: 0.5fr 0.5fr;
     width: var(--main-column-width);
+    grid-row-gap: var(--main-padding);
     /* background: orange; */
     /* padding: var(--main-padding);
-    grid-row-gap: var(--main-padding);
     grid-column-gap: var(--main-padding); */
     /* max-width: 120vh; */
   }
@@ -207,40 +227,84 @@ header, footer {
   }
 }
 
-@media (min-aspect-ratio: 16/9) {
+/* @media (min-aspect-ratio: 16/9) {
   body {
-    /* background: rgba(255, 0, 0, 0.5); */
+    background: rgba(255, 0, 0, 0.5);
   }
 }
 @media (max-aspect-ratio: 16/9) {
   body {
-    /* background: rgba(0, 64, 0, 0.5); */
+    background: rgba(0, 64, 0, 0.5);
   }
-}
-
-/* @media only screen and (min-width: 320px) and (max-width: 479px) {
+} */
+/* 
+@media only screen and (min-width: 320px) and (max-width: 479px) {
   body::after {
     content: 'mobile portrait'
   }
-}
-@media only screen and (orientation:landscape) and (min-width: 480px) and (max-width: 767px) {
-  body::after {
-    content: 'mobile landscape'
+} */
+/* @media only screen and (orientation:landscape) and (min-width: 480px) and (max-width: 767px) {
+  body {
+    background: green;
+  }
+} */
+@media only screen and (orientation:landscape) and (min-width: 768px) {
+  #app {
+    scroll-padding-left: calc((100vw - (var(--screenshot-area-height) * 1.75)) / 2);
+  }
+  .slide-enter {
+	  transform: translateY(-100%);
+  }
+  .slide-enter-to {
+    transform: translateY(0%);
+  }
+  .slide-leave {
+    transform: translateY(0%);
+  }
+  .slide-leave-to {
+    transform: translateY(-100%);
+  }
+  #project-list {
+    /* grid-template-columns: calc(var(--screenshot-area-height) * 1.75); */
+    display: flex;
+    flex-direction: row;
+    padding: 0 calc((100vw - (var(--screenshot-area-height) * 1.75)) / 2);
+    /* width: calc(var(--screenshot-area-height) * 1.75); */
+    /* height: calc(var(--view-height) - var(--header-height)); */
+    /* justify-content: center; */
+    width: 100%;
+    align-items: stretch;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  #page-header {
+    border-bottom-left-radius: var(--header-height);
+    border-bottom-right-radius: var(--header-height);
+  }
+  #hamburger-button.clickable, #hamburger {
+    background: transparent;
+  }
+  #page-footer {
+	  border-top-left-radius: var(--footer-height);
+  }
+  #page-footer #upper-left-piece {
+    display: none;
+  }
+  .body-pane {
+    min-width: calc(var(--screenshot-area-height) * 1.75);
+    margin: 0;
+  }
+  .body-pane:not(:last-of-type) {
+    margin-right: var(--pane-spacing);
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 979px) {
-  body::after {
-    content: 'small desktop'
-  }
+
 }
-@media only screen and (min-width: 1024px) and (max-width: 1199px) {
-  body::after {
-    content: 'med desktop'
-  }
+@media only screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1199px) {
+
 }
-@media only screen and (min-width: 1200px) {
-  body::after {
-    content: 'large desktop'
-  }
-} */
+@media only screen and (orientation: landscape) and (min-width: 1200px) {
+
+}
 </style>

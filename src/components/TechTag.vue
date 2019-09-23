@@ -25,10 +25,9 @@ export default {
     font-size: calc(var(--main-font-size) * 1.1);
 		padding: 0 1em;
     border-radius: calc(var(--inner-padding) / 2);
-    background-color: #070;
+    border: 1px solid #00000055;;
     color: white;
-    text-shadow: 0px 1px 1px black;
+    text-shadow: 0px 1px black;
     margin-right: 0.5em;
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0);
   }
 </style>

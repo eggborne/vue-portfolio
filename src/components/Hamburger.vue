@@ -1,5 +1,5 @@
 <template>
-  <div id='hamburger' v-bind:class='menuOn && `activated`'>
+  <div id='hamburger' :class='menuOn && `activated`'>
     <div class='hamburger-bar'></div>
     <div class='hamburger-bar'></div>
     <div class='hamburger-bar'></div>
@@ -22,7 +22,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	transition: transform 320ms ease;
+	transition: transform 440ms ease;
 	transform-origin: 0% 50%;
 	pointer-events: none;
 	transform-origin: center;
@@ -40,7 +40,7 @@ export default {
 	width: inherit;
 	height: calc(var(--header-height) / 11);
 	background: var(--off-white);
-	transition: transform 320ms ease;
+	transition: transform 440ms ease;
 }
 #hamburger > .hamburger-bar:first-child {
 	transform-origin: 100% 0%;

@@ -23,10 +23,11 @@ export const projects = [
 			'Website for Wagsworth Grooming',
 			'Website for Wagsworth Grooming'
 		],
+		'directory':'wagsworth',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/desktop/wagsworthscreend1.jpg', 'https://eggborne.com/screenshots/portrait/wagsworthscreenp1.jpg'],
-			portrait: ['https://eggborne.com/screenshots/portrait/wagsworthscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/wagsworthscreenp2.jpg', 'https://eggborne.com/screenshots/desktop/wagsworthscreend1.jpg'],
-			desktop: ['https://eggborne.com/screenshots/desktop/wagsworthscreend1.jpg', 'https://eggborne.com/screenshots/portrait/wagsworthscreenp1.jpg']
+			tablet: 1,
+			portrait: 2,
+			desktop: 1
 		},
 		iconUrl: 'https://wagsworthgrooming.com/favicon.ico'
 	},
@@ -47,10 +48,11 @@ export const projects = [
 			'Secure login/registration system',
 			'Modeled after those awful Bingo mobile apps'
 		],
+		'directory':'chickenbingo',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/desktop/chickenbingoscreend2.jpg', 'https://eggborne.com/screenshots/desktop/chickenbingoscreend1.jpg'],
-			portrait: ['https://eggborne.com/screenshots/portrait/chickenbingoscreenp1.jpg','https://eggborne.com/screenshots/portrait/chickenbingoscreenp1.jpg'],
-			desktop: ['https://eggborne.com/screenshots/desktop/chickenbingoscreend1.jpg','https://eggborne.com/screenshots/desktop/chickenbingoscreend2.jpg']
+			tablet: 2,
+			portrait: 1,
+			desktop: 2
 		},
 		iconUrl: 'https://chicken.bingo/android-chrome-192x192.png'
 	},
@@ -71,10 +73,11 @@ export const projects = [
 			'Secure login/registration system',
 			'Online leaderboards'
 		],
+		'directory':'pazaak',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/portrait/pazaakscreenp1.jpg','https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg'],
-			portrait: ['https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg','https://eggborne.com/screenshots/portrait/pazaakscreenp1.jpg'],
-			desktop: ['https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg','https://eggborne.com/screenshots/portrait/pazaaktitlep.jpg']
+			tablet: 0,
+			portrait: 3,
+			desktop: 0
 		},
 		iconUrl: 'https://pazaak.online/dist/favicon.png'
 	},
@@ -95,10 +98,11 @@ export const projects = [
 			'Syllable-based word construction',
 			'Avoids awkward or unpronouncable combinations'
 		],
+		'directory':'namegenerator',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/desktop/namegeneratortitled.png'],
-			portrait: ['https://eggborne.com/screenshots/portrait/namegeneratortitlep.jpg'],
-			desktop: ['https://eggborne.com/screenshots/desktop/namegeneratortitled.png']
+			tablet: 1,
+			portrait: 1,
+			desktop: 1
 		},
 		iconUrl: 'https://pazaak.online/assets/images/loadingicon.png'
 	},
@@ -119,17 +123,13 @@ export const projects = [
 			'Gamepad support',
 			'Online leaderboard'
 		],
+		'directory':'brutalkungfu',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/desktop/kungfuscreend2.png','https://eggborne.com/screenshots/desktop/kungfutitled.jpg'],
-			portrait: [
-				'https://eggborne.com/screenshots/portrait/kungfuscreenp1.jpg',
-				'https://eggborne.com/screenshots/portrait/kungfutitlep.jpg',
-				'https://eggborne.com/screenshots/portrait/kungfuscreenp2.jpg',
-				'https://eggborne.com/screenshots/portrait/kungfuscreenp3.jpg'
-			],
-			desktop: ['https://eggborne.com/screenshots/desktop/kungfutitled.jpg', 'https://eggborne.com/screenshots/desktop/kungfuscreend2.png', 'https://eggborne.com/screenshots/desktop/kungfuscreend3.jpg']
+			tablet: 1,
+			portrait: 4,
+			desktop: 4
 		},
-		iconUrl: 'https://brutalkungfu.com/favicon.png'
+		iconUrl: 'https://eggborne.com/icons/bkficon.png'
 	},
 	{
 		'id': 5,
@@ -145,15 +145,11 @@ export const projects = [
 		'descriptionBullets': [
 			'Online leaderboard',
 		],
+		'directory':'tetro',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/landscape/tetroscreenl1.png', 'https://eggborne.com/screenshots/landscape/tetroscreenl3.png', 'https://eggborne.com/screenshots/landscape/tetroscreenl2.png'],
-			portrait: [
-				'https://eggborne.com/screenshots/portrait/tetroscreenp2.jpg', 
-				'https://eggborne.com/screenshots/portrait/tetroscreenp4.jpg', 
-				'https://eggborne.com/screenshots/portrait/tetroscreenp3.jpg',
-				'https://eggborne.com/screenshots/portrait/tetrotitlep.jpg'
-			],
-			desktop: ['https://eggborne.com/screenshots/desktop/tetroscreend1.jpg', 'https://eggborne.com/screenshots/desktop/tetrotitled.jpg']
+			tablet: 3,
+			portrait: 5,
+			desktop: 2
 		},
 		iconUrl: 'https://eggborne.com/tetro/favicon.bmp'
 	},
@@ -172,13 +168,11 @@ export const projects = [
 			'Onscreen touch controls adapt to right- or left-handed play',
 			'Online leaderboard'
 		],
+		'directory':'frogracer',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/landscape/frogracertitlel.png', 'https://eggborne.com/screenshots/landscape/frogracerscreenl1.png'],
-			portrait: [
-				'https://eggborne.com/frogracer/assets/screenshot1.png', 
-				'https://eggborne.com/screenshots/portrait/frogracertitlep.jpg'
-			],
-			desktop: ['https://eggborne.com/screenshots/desktop/frogracertitled.png', 'https://eggborne.com/screenshots/desktop/frogracerscreend1.png', 'https://eggborne.com/frogracer/assets/screenshot2.png']
+			tablet: 2,
+			portrait: 2,
+			desktop: 3
 		},
 		iconUrl: 'https://eggborne.com/frogracer/assets/favicon-med.png'
 	},
@@ -194,19 +188,11 @@ export const projects = [
 		'descriptionBullets': [
 			'Uses the structure of the original map, but randomizes the contents',
 		],
+		'directory':'metroid',
 		'screenshots': {
-			tablet: [
-				'https://eggborne.com/screenshots/landscape/metroidscreenl2.png', 
-				'https://eggborne.com/screenshots/landscape/metroidtitlel.png'
-			],
-			portrait: [
-				'https://eggborne.com/screenshots/portrait/metroidscreenp1.jpg', 
-				'https://eggborne.com/screenshots/portrait/metroidtitlep.jpg'
-			],
-			desktop: [
-				'https://eggborne.com/screenshots/desktop/metroidtitled.png',
-				'https://eggborne.com/screenshots/desktop/metroidscreend1.png'
-			]
+			tablet: 2,
+			portrait: 2,
+			desktop: 2
 		},
 		iconUrl: 'https://eggborne.com/icons/metroidicon.png'
 	},
@@ -222,10 +208,11 @@ export const projects = [
 		'descriptionBullets': [
 			"Highly customizable in logic and appearance",
 		],
+		'directory':'cas',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/desktop/casscreend1.jpg'],
-			portrait: ['https://eggborne.com/screenshots/portrait/casscreenp1.jpg'],
-			desktop: ['https://eggborne.com/screenshots/desktop/casscreend1.jpg']
+			tablet: 1,
+			portrait: 1,
+			desktop: 1
 		},
 		iconUrl: 'https://eggborne.com/icons/casicon.png'
 	},
@@ -241,23 +228,11 @@ export const projects = [
 		'descriptionBullets': [
 			'A narrative platforming adventure starring Super Mario\'s Toad'
 		],
+		'directory':'toadgame',
 		'screenshots': {
-			tablet: [
-				'https://eggborne.com/screenshots/landscape/toadgamescreenl2.jpg',
-				'https://eggborne.com/screenshots/landscape/toadgamescreenl1.jpg'
-			],
-			portrait: [
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp1.jpg', 
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp2.jpg',
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp3.jpg',
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp4.jpg',
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp5.jpg',
-				'https://eggborne.com/screenshots/portrait/toadgamescreenp6.jpg',
-			],
-			desktop: [
-				'https://eggborne.com/screenshots/desktop/toadgamescreend1.jpg',
-				'https://eggborne.com/screenshots/desktop/toadgamescreend2.jpg'
-			]
+			tablet: 2,
+			portrait: 6,
+			desktop: 2
 		},
 		iconUrl: 'https://eggborne.com/icons/toadicon.png'
 	},
@@ -276,10 +251,11 @@ export const projects = [
 		'descriptionBullets': [
 			'Makes you feel better temporarily',
 		],
+		'directory':'punchout',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/landscape/punchoutscreenl1.png','https://eggborne.com/screenshots/landscape/punchouttitlel.png'],
-			portrait: ['https://eggborne.com/screenshots/portrait/punchoutscreenp1.jpg', 'https://eggborne.com/screenshots/portrait/punchoutscreenp2.jpg'],
-			desktop: ['https://eggborne.com/screenshots/desktop/punchouttitled.png', 'https://eggborne.com/screenshots/desktop/punchoutscreend1.jpg'],
+			tablet: 2,
+			portrait: 2,
+			desktop: 2
 		},
 		iconUrl: 'https://eggborne.com/icons/boxinggloveicon.png'
 	},
@@ -297,10 +273,11 @@ export const projects = [
 		'descriptionBullets': [
 			'A fast-paced Missile Command/tower defense mashup'
 		],
+		'directory':'eggprotector',
 		'screenshots': {
-			tablet: ['https://eggborne.com/screenshots/landscape/eggprotectorscreenl1.jpg'],
-			portrait: ['https://eggborne.com/screenshots/portrait/eggprotectorscreenp1.jpg'],
-			desktop: ['https://eggborne.com/screenshots/landscape/eggprotectorscreenl1.jpg']
+			tablet: 1,
+			portrait: 1,
+			desktop: 1
 		},
 		iconUrl: 'https://eggborne.com/icons/fetusicon.jpg'
 	},
@@ -318,11 +295,14 @@ export const projects = [
 		'descriptionBullets': [
 			'This selfsame website which you are currently visiting',
 		],
+		'directory':'mikedonovandev',
 		'screenshots': {
-				tablet: ['https://eggborne.com/screenshots/landscape/portscreenl1.png'],
-				portrait: ['https://eggborne.com/screenshots/portrait/portscreenp1.png', 'https://eggborne.com/screenshots/portrait/portscreenp2.png'],
-				desktop: ['https://eggborne.com/screenshots/desktop/portscreend1.png', 'https://eggborne.com/screenshots/desktop/portscreend2.png']
+			tablet: 1,
+			portrait: 1,
+			desktop: 1
 		},
-		iconUrl: 'chicken.png'
+		iconUrl: 'https://eggborne.com/icons/chickenicon.png'
 	},
 ];
+
+console.info(projects)

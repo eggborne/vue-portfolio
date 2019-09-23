@@ -1,14 +1,32 @@
 <template>
 	<div id="menu">
-		<div id="project-listings">
+		<div id='button-area'>
+			<div 
+				class='list-button clickable'
+				:class='listMode === `icon` && `activated`'
+				@click='changeListMode'
+			>
+			<span>Icon View</span>
+			<img src='https://eggborne.com/icons/viewiconsicon.png' />
+			</div>
+			<div 
+				class='list-button clickable'
+				:class='listMode === `list` && `activated`'
+				@click='changeListMode'
+			>
+			<span>List View</span>
+			<img src='https://eggborne.com/icons/viewlisticon.png' />
+			</div>
+		</div>
+		<div :class='listMode' id="project-listings">
 			<div
 				v-for="(proj, i) in projects"
-				v-bind:key="proj + `-` + i"
-				class="project-listing clickable"
-				v-on:click="goToProject"
+				:key="proj + `-` + i"
+				class="project-listing clickable"				
+				@click="goToProject"
 			>
-				<img v-bind:src="proj.iconUrl" />
-				<div v-bind:class='proj.name.length > 20 && `small-text`'>{{ proj.name }}</div>
+				<img :src="proj.iconUrl" />
+				<div>{{ proj.name }}</div>
 			</div>
 		</div>
 	</div>
@@ -17,6 +35,11 @@
 import Hamburger from './Hamburger.vue';
 export default {
 	name: 'Menu',
+	data: () => {
+		return {
+			listMode: 'icon'
+		}
+	},
 	props: {
 		projects: Array,
 		menuOn: Boolean,
@@ -31,8 +54,15 @@ export default {
 			e.target.classList.toggle('open');
 			e.target.classList.toggle('showing');
 		},
+		changeListMode(e) {
+			let newMode = e.target.innerText.split(' ')[0].toLowerCase();
+			console.log('changing to', newMode);
+			this.listMode = newMode;
+		},
 		goToProject: function(e) {
 			let projectIndex = [...e.target.parentElement.children].indexOf(e.target);			
+			console.log('clicked is', e.target);
+			console.log('parent is', e.target.parentElement)
 			console.log('------------clickced proj ind', projectIndex)
 			let targetPane = document.getElementById('project-list').children[
 				projectIndex
@@ -51,108 +81,145 @@ export default {
 
 <style scoped>
 #menu {
-	--badge-size: calc(var(--header-height) * 1.65);
-	padding: var(--inner-padding);
+	--badge-size: calc(var(--header-height) * 1.5);
+	--list-row-height: calc(var(--header-height) / 1.5);
+	--max-row-height: calc((var(--view-height) - (var(--header-height) * 1.625) - (var(--main-padding) * 3) - (var(--inner-padding) * 12)) / 13);
 	position: absolute;
-	height: calc(var(--view-height) - var(--header-height));
-	top: var(--header-height);
+	width: calc((var(--badge-size) * 3) + (var(--pane-spacing) * 2) + var(--inner-padding) * 2);
+	/* height: calc(var(--view-height) - var(--header-height)); */
+	top: calc(var(--header-height) - var(--inner-padding));
 	right: 0;
-	background: #111;
+	background: #080808;
 	color: var(--off-white);
 	font-size: 1rem;
-	transition: transform 320ms ease;
-}
-.category > .down-arrow {
-	width: 0;
-	height: 0;
-	border-left: var(--main-padding) solid transparent;
-	border-right: var(--main-padding) solid transparent;
-	border-top: var(--main-padding) solid var(--off-white);
-	transform: rotate(0deg);
-	pointer-events: none;
-	transition: transform 210ms ease;
-}
-.category.open > .down-arrow {
-	transform: scaleY(-1);
-}
-.category {
-	background: #181818;
 	padding: var(--main-padding);
-	margin-bottom: var(--inner-padding);
-	border-radius: calc(var(--main-padding) / 4);
+	padding-top: 0;
+	border-bottom-left-radius: calc(var(--inner-padding));
+	transition: transform 440ms ease;
+	padding-top: var(--inner-padding);	
 }
-.category {
+#menu:not(.activated) {
+	transform: translateX(100%);
+}
+#button-area {
+	width: 100%;
+	height: calc(var(--header-height) / 1.5);
 	display: flex;
 	align-items: center;
-	align-self: stretch;
-	justify-content: space-between;
-	padding: calc(var(--main-padding) * 1.5);
-	font-size: 1rem;
+	justify-content: flex-end;
+	font-size: calc(var(--header-height) / 5);
 }
-#project-listings,
-#contact-form {
+.list-button {
+	background: transparent;
+	border-radius: calc(var(--inner-padding) / 1.5);
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	height: 100%;
+	width: calc(var(--header-height) * 1.75);
 	display: flex;
-	flex-direction: column;
 	align-items: center;
-	padding: 0;
-	align-items: stretch;
+	justify-content: space-evenly;
+	border: 1px solid transparent;
+	border-bottom-color: #080808;
+	background: #080808;
+	/* transform-origin: center;		 */
+}
+.list-button > * {
+	opacity: 0.4;
+}
+.list-button > img {
+	height: 50%;
+	pointer-events: none;
+}
+.list-button:last-child {
+	margin-left: var(--inner-padding);
+}
+.list-button.activated {
+	/* background: #111; */
+	border-color: #222;
+	border-bottom-color: #080808;
+	transform: scaleY(1.01);
+}
+.list-button.activated > * {
+	transform: scaleY(0.95);
+}
+.list-button.clickable:hover > * {
+	opacity: 1;
 }
 #project-listings {
-	width: inherit;
-	padding: inherit;
-	display: grid;
-	grid-template-columns: 33% 1fr 33%;
-	grid-row-gap: var(--inner-padding);
-	font-size: calc(var(--badge-size) / 8);
-	/* font-weight: 700; */
-}
-#contact-form {
 	width: 100%;
-}
-#contact-form > * {
-	margin: var(--main-padding) var(--inner-padding);
+	font-weight: 700;
+	display: grid;
+	grid-row-gap: var(--inner-padding);
 	padding: var(--main-padding);
-	opacity: 0;
-	transition: opacity 210ms ease;
+	border: 1px solid #222;
+	border-radius: calc(var(--inner-padding) / 1.5);	
+	background: #080808;
 }
-#contact-form > textarea {
-	height: calc(var(--header-height) * 2);
+#project-listings > .project-listing {
+	border-radius: calc(var(--inner-padding) / 1.5);
 }
-.category.open + #project-listings {
-	transform: scaleY(1);
-	height: 100%;
+#project-listings.icon {
+	font-size: calc(var(--badge-size) / 9);
+	grid-template-columns: repeat(3, var(--badge-size));
+	grid-column-gap: var(--inner-padding);	
 }
-.category.open + #contact-form {
-	transform: scaleY(1);
-	height: 100%;
-	padding: var(--main-padding);
+#project-listings.list {
+	font-size: calc(var(--badge-size) / 8);
+	grid-template-columns: 1fr;
+	/* padding: var(--main-padding); */
 }
-.project-listing {
-	padding: var(--inner-padding);
+#project-listings.icon > .project-listing {
 	display: grid;
 	align-items: center;
 	justify-items: center;
-	grid-template-rows: 1fr calc(var(--header-height) / 1.25);
+	grid-template-rows: 1fr calc(var(--header-height) / 2);
 	text-align: center;	
 	width: var(--badge-size);
 	height: var(--badge-size);
+	background: #111;
 }
-.small-text {
-	font-size: calc(var(--badge-size) / 9);
+#project-listings.list > .project-listing {
+	display: grid;
+	grid-template-columns: 1fr var(--list-row-height);
+	grid-auto-rows: auto;
+	text-align: right;
+	align-items: center;
+	grid-column-gap: var(--main-padding);
+	background: #111;
+	width: 100%;
+	height: 100%;
+	justify-self: end;
+	padding: 0 var(--inner-padding);	
+}
+.project-listing > * {
+	pointer-events: none;
 }
 .project-listing.clickable:hover {
-	background: #151515;
+	background: #222 !important;
 }
-.project-listing > img {
+#project-listings.icon > .project-listing > img {
 	border-radius: 50%;
 	width: 45%;
 	height: auto;
-	pointer-events: none;
-	/* border-radius: 50%; */
 }
-.project-listing > div {
-	/* align-self: end; */
-	pointer-events: none;
+#project-listings.list > .project-listing > img {
+	width: calc(100% - var(--main-padding));
+	height: auto;
+	grid-row-start: 1;
+	grid-column-start: 2;
+}
+#project-listings.icon > .project-listing > div {	
+	align-self: start;
+}
+#project-listings.list > .project-listing > div {	
+	grid-row-start: 1;
+	grid-column-start: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	height: calc(var(--badge-size) / 2);
+	max-height: var(--max-row-height);
 }
 .category.showing + #project-listings > .project-listing,
 .category.showing + #contact-form > * {
@@ -162,14 +229,22 @@ export default {
 }
 @media screen and (orientation: landscape) {
 	#menu {
-		/* position: absolute; */
-		/* right: unset; */
-		/* width: calc(var(--main-column-width) / 2); */
+		--max-row-height: unset;
+		width: calc((var(--badge-size) * 4) + (var(--pane-spacing) * 2) + var(--inner-padding) * 3);
+		padding-top: var(--header-height);
+		top: 0;
 		height: unset;
-		z-index: 0;
+		border-bottom-right-radius: calc(var(--inner-padding));
 	}
-	#project-listings {
-		grid-template-columns: repeat(4, 0.25fr);
+	#menu:not(.activated) {
+		transform: translateY(-100%);
+	}
+	#project-listings.icon {
+		grid-template-columns: repeat(4, var(--badge-size));
+	}
+	#project-listings.list {
+		grid-template-columns: 0.5fr 0.5fr;
+		grid-column-gap: var(--main-padding);
 	}
 }
 </style>
