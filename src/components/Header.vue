@@ -2,12 +2,27 @@
 <header id='page-header'>
   <transition name='slide'>	
     <Menu 
+      :mode='menuMode'
       :toggleMenu='toggleMenu' 
-      :projects='projects' 
-      :class='menuOn && `activated`' 
+      :projects='projects'
+      :switchProjects='switchProjects'
+      :class='menuOn && `activated`'
+      :options='options'
+      :toggleOption='toggleOption'
+      :setOption='setOption'
+      :adjustRangedOption='adjustRangedOption'
     />
   </transition>
-  <div 
+  <div id='menu-button-area' :class='[menuOn && `showing`, menuMode === `projectsMode` ? `projects-mode` : `settings-mode`]'>
+    <Touchable id='settings-button' class='menu-button clickable' :pointerDownAction='() => menuMode = `settingsMode`'>
+      <i class="material-icons"> settings </i>
+    </Touchable>
+    <Touchable id='projects-button' class='menu-button clickable' :pointerDownAction='() => menuMode = `projectsMode`'>
+      <i class="material-icons"> computer </i>
+    </Touchable>
+  </div>
+  <h1 
+    :class='menuOn && `truncated`'
     id='title-text'    
   >
     <span
@@ -17,35 +32,39 @@
     >
     {{ letter === ' ' ? `&nbsp;` : letter }}
     </span>
-  </div>
-  <div 
-    @click='toggleMenu' 
-    id='hamburger-button' 
-    class='clickable'    
-  >
+  </h1>
+  <Touchable id='hamburger-button' :pointerDownAction='toggleMenu'>
     <Hamburger :menuOn='menuOn' />
-  </div>
-  <div id='lower-right-piece'>
+  </Touchable>
+  <!-- </div> -->
+  <!-- <div class='lower-right-piece wavy-corner'> -->
     
-  </div>
+  <!-- </div> -->
 </header>
 </template>
 
 <script>
-
 import Hamburger from './Hamburger.vue';
 import Menu from './Menu.vue';
+import Touchable from './Touchable.vue';
+
 export default {
   name: 'Header',
   data: function() { return { 
     titleArray: [],
-    lettersRevealed: -1
+    lettersRevealed: -1,
+    menuMode: 'projectsMode'
   }},
   props: {
     titleText: String,
     toggleMenu: Function,
     menuOn: Boolean,
-    projects: Array,    
+    projects: Array,
+    switchProjects: Function,
+    options: Object,
+    toggleOption: Function,
+    setOption: Function,
+    adjustRangedOption: Function
   },
   mounted() {
     this.titleArray = this.titleText.split('');
@@ -64,7 +83,8 @@ export default {
   },
 	components: {
     Hamburger,
-    Menu
+    Menu,
+    Touchable
 	}
 }
 </script>
@@ -72,7 +92,8 @@ export default {
 <style scoped>
 #page-header {
   font-size: var(--title-font-size);
-  width: calc(100vw - var(--header-height));
+  /* width: calc(100vw - var(--header-height)); */
+  width: 100vw;
   position: absolute;
   top: 0;
   right: 0;
@@ -80,45 +101,24 @@ export default {
   align-items: center;
   justify-content: space-between;
   z-index: 3;
-  background: #080808;
+  background: var(--header-color);
+  /* transition: border var(--shift-speed) ease; */
 }
-#page-header::before, #lower-right-piece::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  border-radius: 50%;
-  background-color: #080808;
-  width: calc(var(--header-height) * 2);
-  height: calc(var(--header-height) * 2);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+h1 {
+  font-weight: normal 
 }
-#lower-right-piece {
-  position: absolute;
-  /* left: calc(100vw - var(--header-height)); */
-  right: 0;
-  top: var(--header-height);
-  width: var(--header-height);
-  height: var(--header-height);
-  overflow: hidden;
-  pointer-events: none;
-  /* border: 2px solid red; */
-  /* background: blue; */
-}
-#lower-right-piece::before {
-  transform: translateX(-50%);
-  transform-origin: unset;
-  background: transparent;
-  box-shadow: calc(var(--header-height) / 3) calc(var(--header-height) / -3) 0px #080808;
+#app.wavy #page-header {
+  border-bottom-left-radius: var(--arc-radius);
 }
 #title-text {
   font-size: calc(var(--header-height) / 4);
-  margin-left: calc(var(--main-padding) * -2);
+  margin-left: calc(var(--header-height) / 1.75);
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+}
+#title-text.truncated {
+  /* transform: scale(0.7) translate(calc(var(--header-height) / -3.5), calc(var(--header-height) / -4)); */
 }
 #title-text > span {
   transform-origin: center right;
@@ -136,14 +136,66 @@ export default {
   /* top: 0;
   right: 0px; */
   width: var(--header-height);
-  height: var(--header-height);
+  height: calc(var(--header-height) * 0.9);
   transition: opacity 320ms ease;
   z-index: -1;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 4;
-  background: #080808;
+  background: var(--header-color);
+  border: 0;
+}
+#menu-button-area {
+  position: absolute;
+  top: 0;
+  right: 0;
+	height: calc(var(--header-height));
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+  margin-right: calc(var(--header-height));
+  z-index: 12;
+  pointer-events: none;
+	/* background: var(--header-color); */
+}
+#menu-button-area.showing {
+  pointer-events: all;
+}
+.menu-button {
+	width: calc(var(--header-height) - var(--main-padding));
+	height: calc(var(--header-height) - var(--main-padding));
+	/* margin: var(--inner-padding); */
+	margin-right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: calc(var(--inner-padding) / 2) solid transparent;
+	opacity: 0;
+	transition-delay: 0ms;
+  border-radius: 10%;
+  transform: translateY(-10%);
+	transition: opacity 320ms ease, transform 320ms ease;
+}
+#menu-button-area.showing .menu-button {
+	opacity: 1;
+	transform: translateY(0);
+	/* transition-delay: 300ms; */
+}
+#menu-button-area .menu-button:first-of-type {
+	transition-delay: 0ms;
+}
+#menu-button-area .menu-button:nth-of-type(2) {
+	transition-delay: 100ms;
+}
+#menu-button-area.showing .menu-button:first-of-type {
+	transition-delay: 210ms;
+}
+#menu-button-area.showing .menu-button:nth-of-type(2) {
+	transition-delay: 100ms;
+}
+.projects-mode #projects-button, .settings-mode #settings-button {
+	border-color: var(--off-white);
 }
 @media screen and (orientation: landscape) {
   #page-header {

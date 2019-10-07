@@ -9,7 +9,7 @@ export const techTagColors = {
 }
 export const projects = [
 	{
-		'id': 3,
+		'id': 0,
 		'name': 'Wagsworth Grooming',
 		'url': 'https://eggborne.com/wag',
 		'repo': 'https://github.com/eggborne/wagsworth',
@@ -25,14 +25,14 @@ export const projects = [
 		],
 		'directory':'wagsworth',
 		'screenshots': {
-			tablet: 1,
 			portrait: 2,
-			desktop: 1
+			desktop: 1,
+			tablet: 1,
 		},
 		iconUrl: 'https://wagsworthgrooming.com/favicon.ico'
 	},
 	{
-		'id': 0,
+		'id': 1,
 		'name': 'Chicken Bingo',
 		'url': 'https://chicken.bingo',
 		'repo': 'https://github.com/eggborne/chicken-bingo',
@@ -50,9 +50,9 @@ export const projects = [
 		],
 		'directory':'chickenbingo',
 		'screenshots': {
-			tablet: 2,
 			portrait: 1,
-			desktop: 2
+			desktop: 2,
+			tablet: 2,
 		},
 		iconUrl: 'https://chicken.bingo/android-chrome-192x192.png'
 	},
@@ -75,14 +75,14 @@ export const projects = [
 		],
 		'directory':'pazaak',
 		'screenshots': {
-			tablet: 0,
 			portrait: 3,
-			desktop: 0
+			desktop: 0,
+			tablet: 0,
 		},
 		iconUrl: 'https://pazaak.online/dist/favicon.png'
 	},
 	{
-		'id': 4,
+		'id': 3,
 		'name': 'Name Generator',
 		'url': 'https://www.eggborne.com/namegenerator',
 		'repo': 'https://github.com/eggborne/customizable-name-generator',
@@ -100,14 +100,14 @@ export const projects = [
 		],
 		'directory':'namegenerator',
 		'screenshots': {
-			tablet: 1,
 			portrait: 1,
-			desktop: 1
+			desktop: 1,
+			tablet: 1,
 		},
 		iconUrl: 'https://pazaak.online/assets/images/loadingicon.png'
 	},
 	{
-		'id': 1,
+		'id': 4,
 		'name': 'Brutal Kung Fu',
 		'url': 'https://brutalkungfu.com',
 		'repo': 'https://github.com/eggborne/brutal-kung-fu',
@@ -125,9 +125,9 @@ export const projects = [
 		],
 		'directory':'brutalkungfu',
 		'screenshots': {
-			tablet: 1,
 			portrait: 4,
-			desktop: 4
+			desktop: 4,
+			tablet: 1,
 		},
 		iconUrl: 'https://eggborne.com/icons/bkficon.png'
 	},
@@ -147,9 +147,9 @@ export const projects = [
 		],
 		'directory':'tetro',
 		'screenshots': {
-			tablet: 3,
 			portrait: 5,
-			desktop: 2
+			desktop: 2,
+			tablet: 3,
 		},
 		iconUrl: 'https://eggborne.com/tetro/favicon.bmp'
 	},
@@ -170,9 +170,9 @@ export const projects = [
 		],
 		'directory':'frogracer',
 		'screenshots': {
-			tablet: 2,
 			portrait: 2,
-			desktop: 3
+			desktop: 3,
+			tablet: 2,
 		},
 		iconUrl: 'https://eggborne.com/frogracer/assets/favicon-med.png'
 	},
@@ -190,14 +190,14 @@ export const projects = [
 		],
 		'directory':'metroid',
 		'screenshots': {
-			tablet: 2,
 			portrait: 2,
-			desktop: 2
+			desktop: 2,
+			tablet: 2,
 		},
 		iconUrl: 'https://eggborne.com/icons/metroidicon.png'
 	},
 	{
-		'id': 100,
+		'id': 8,
 		'name': 'Cellular Automata Sandbox',
 		'url': 'https://eggborne.com/tca',
 		'repo': 'https://github.com/eggborne/cellular-automata-sandbox',
@@ -210,14 +210,14 @@ export const projects = [
 		],
 		'directory':'cas',
 		'screenshots': {
-			tablet: 1,
 			portrait: 1,
-			desktop: 1
+			desktop: 1,
+			tablet: 1,
 		},
 		iconUrl: 'https://eggborne.com/icons/casicon.png'
 	},
 	{
-		'id': 101,
+		'id': 9,
 		'name': 'Toad\'s Odyssey',
 		'url': 'https://eggborne.com/toad',
 		'repo': 'https://github.com/eggborne/toad-game',
@@ -230,15 +230,15 @@ export const projects = [
 		],
 		'directory':'toadgame',
 		'screenshots': {
-			tablet: 2,
 			portrait: 6,
-			desktop: 2
+			desktop: 2,
+			tablet: 2,
 		},
 		iconUrl: 'https://eggborne.com/icons/toadicon.png'
 	},
 	
 	{
-		'id': 8,
+		'id': 10,
 		'name': 'Donald Trump\'s Punch-Out',
 		'url': 'https://eggborne.com/punchout',
 		'repo': 'https://github.com/eggborne/donald-trump-punch-out',
@@ -253,14 +253,14 @@ export const projects = [
 		],
 		'directory':'punchout',
 		'screenshots': {
-			tablet: 2,
 			portrait: 2,
-			desktop: 2
+			desktop: 2,
+			tablet: 2,
 		},
 		iconUrl: 'https://eggborne.com/icons/boxinggloveicon.png'
 	},
 	{
-		'id': 9,
+		'id': 11,
 		'name': 'Egg Protector',
 		'url': 'https://eggborne.com/eggprotector',
 		'repo': 'https://github.com/eggborne/egg-protector',
@@ -275,14 +275,14 @@ export const projects = [
 		],
 		'directory':'eggprotector',
 		'screenshots': {
-			tablet: 1,
 			portrait: 1,
-			desktop: 1
+			desktop: 1,
+			tablet: 1,
 		},
 		iconUrl: 'https://eggborne.com/icons/fetusicon.jpg'
 	},
 	{
-		'id': 10,
+		'id': 12,
 		'name': 'This very website',
 		'url': 'https://mikedonovan.dev',
 		'repo': 'https://github.com/eggborne/vue-portfolio',
@@ -297,11 +297,118 @@ export const projects = [
 		],
 		'directory':'mikedonovandev',
 		'screenshots': {
-			tablet: 1,
 			portrait: 1,
-			desktop: 1
+			desktop: 1,
+			tablet: 1,
 		},
 		iconUrl: 'https://eggborne.com/icons/chickenicon.png'
+	},
+];
+
+export const optionData = [
+	{
+		id: 0,
+		inputType: 'toggle',
+		defaultValue: true,
+		name: 'spaMode',
+		title: 'Single Page',
+		cssVar: ''
+	},
+	{
+		id: 1,
+		inputType: 'toggle',
+		defaultValue: false,
+		name: 'wavyMode',
+		title: 'Waviness',
+		cssVar: ''
+	},
+	{
+		id: 1,
+		inputType: 'range',
+		step: 2,
+		minValue: 0,
+		maxValue: 100,
+		unitSuffix: '%',
+		defaultValue: 50,
+		name: 'waveRadius',
+		title: 'Waviness',
+		cssVar: '--arc-radius'
+	},
+	{
+		id: 2,
+		inputType: 'toggle',
+		defaultValue: false,
+		name: 'darkMode',
+		title: 'Space Mode',
+		cssVar: ''
+	},
+	{
+		id: 3,
+		inputType: 'toggle',
+		defaultValue: true,
+		name: 'animations',
+		title: 'Animations',
+		cssVar: '--animations'
+	},
+	{
+		id: 4,
+		inputType: 'range',
+		step: 1,
+		minValue: 0,
+		maxValue: 10,
+		unitSuffix: '',
+		defaultValue: 1,
+		name: 'borderSize',
+		title: 'Border size',
+		cssVar: '--highlight-width'
+	},
+	{
+		id: 5,
+		inputType: 'color',
+		defaultValue: '#2d382a',
+		name: 'headerColor',
+		title: 'Header / Menu',
+		cssVar: '--header-color'
+	},
+	{
+		id: 6,
+		inputType: 'color',
+		defaultValue: '#33323b',
+		name: 'cardBgColor',
+		title: 'Card background',
+		cssVar: '--card-bg-color'
+	},
+	{
+		id: 7,
+		inputType: 'color',
+		defaultValue: '#080808',
+		name: 'mainBgColor',
+		title: 'Main background',
+		cssVar: '--main-bg-color'
+	},
+	{
+		id: 8,
+		inputType: 'color',
+		defaultValue: '#252f33',
+		name: 'cardHeaderColor',
+		title: 'Card header',
+		cssVar: '--card-header-color'
+	},
+	{
+		id: 9,
+		inputType: 'color',
+		defaultValue: '#4e5c40',
+		name: 'highlightColor',
+		title: 'Border',
+		cssVar: '--highlight-color'
+	},
+	{
+		id: 10,
+		inputType: 'color',
+		defaultValue: '#d8d8d8',
+		name: 'textColor',
+		title: 'Text',
+		cssVar: '--main-text-color'
 	},
 ];
 

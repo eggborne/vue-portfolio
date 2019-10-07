@@ -19,7 +19,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-src/.htaccess
+.htaccess
 deploy.sh
 converttowebp.sh
 src/assets/screenshots

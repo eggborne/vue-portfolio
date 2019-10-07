@@ -22,7 +22,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	transition: transform 440ms ease;
+	transition: transform var(--shift-speed) ease;
 	transform-origin: 0% 50%;
 	pointer-events: none;
 	transform-origin: center;
@@ -40,7 +40,7 @@ export default {
 	width: inherit;
 	height: calc(var(--header-height) / 11);
 	background: var(--off-white);
-	transition: transform 440ms ease;
+	transition: transform var(--shift-speed) ease;
 }
 #hamburger > .hamburger-bar:first-child {
 	transform-origin: 100% 0%;

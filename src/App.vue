@@ -1,70 +1,249 @@
 <template>
-  <div id='app'>
+  <div :class='[
+      spaMode && `spa`, 
+      wavyMode && `wavy`, 
+      darkMode && `dark`,
+      !animations && `no-animations`
+    ]' 
+    id='app'
+  >
     <div id='header-space'></div>
     <Header 
-			:projects='projects' 
+			:projects='projects'
 			:toggleMenu='toggleMenu' 
+      :switchProjects='switchProjects'
 			:menuOn='menuOn' 
 			:titleText='`web projects of Mike Donovan`'
+      :options='{spaMode: spaMode, wavyMode: wavyMode, waveRadius: waveRadius, darkMode: darkMode, 
+      animations: animations,
+      highlightColor: highlightColor,
+      headerColor: headerColor,
+      mainBgColor: mainBgColor,
+      cardBgColor: cardBgColor,
+      cardHeaderColor: cardHeaderColor,
+      textColor: textColor,
+      borderSize: borderSize
+       }'
+      :toggleOption='toggleOption'
+      :setOption='setOption'
+      :adjustRangedOption='adjustRangedOption'
 		/>
-    <!-- <Header v-if='!landscape' :toggleMenu='toggleMenu' :menuOn='menuOn' :titleText='titleText' /> -->
-    <MainBody :landscape='landscape' :toggleMenu='toggleMenu' :projects='projects' :menuOn='menuOn' />
-    <Footer msg='Footer'/>
-    <!-- <transition name='slide'>	
-      <Menu 
-        :toggleMenu='toggleMenu' 
-        :projects='projects' 
-        v-if='menuOn' 
-      />
-    </transition> -->
+    <MainBody 
+      v-if='dataReady'
+      :landscape='landscape' 
+      :toggleMenu='toggleMenu' 
+      :projects='projects' 
+      :menuOn='menuOn'
+      :spaMode='spaMode'
+      :currentProject='currentProject'
+      :previousProject='previousProject'
+      :projectsSeen='projectsSeen'
+      :reportScreenUrls='reportScreenUrls'
+    />
+    <Footer :spaMode='spaMode' :switchProjects='switchProjects'/>
+    <video v-if='darkMode' muted autoplay loop id='space-bg'>
+      <source src='./assets/starfield.mp4' type='video/mp4'>
+    </video>
   <!-- <ScreenGrabber /> -->
   </div>
 </template>
 
 <script>
-import { projects }  from './projects.js';
+import SwipeDetector  from './swipe.js';
+import { projects, optionData }  from './projects.js';
 import Header from './components/Header.vue';
 import MainBody from './components/MainBody.vue';
 import Footer from './components/Footer.vue';
-import Menu from './components/Menu.vue';
 
-import ScreenGrabber from './components/ScreenGrabber.vue';
+function setScreenDimensions() {
+  window.HEADER_HEIGHT =
+    window.innerWidth < window.innerHeight
+      ?  Math.round(window.innerWidth * 0.16 - window.innerHeight * 0.01)
+      : Math.round(window.innerHeight * 0.12 - window.innerWidth * 0.01);
+  window.MAIN_PADDING = Math.round(window.HEADER_HEIGHT / 5.5);
+  window.MAIN_PADDING += window.MAIN_PADDING % 2;
+  window.DEFAULT_HIGHLIGHT_WIDTH = Math.round(window.MAIN_PADDING / 5);
+  window.HIGHLIGHT_WIDTH = Math.round(window.MAIN_PADDING / 12);
+  window.CARD_SPACING = window.MAIN_PADDING * 1;
+  document.documentElement.style.setProperty('--view-height', window.innerHeight + 'px');
+  document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
+  document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
+  document.documentElement.style.setProperty('--highlight-width', window.HIGHLIGHT_WIDTH + 'px');
+  document.documentElement.style.setProperty('--card-spacing', window.CARD_SPACING + 'px');
+}
 
 export default {
   data: function() { 
     return {
       landscape: false,
+      spaMode: true,
+      wavyMode: true,
+      waveRadius: 50,
+      borderSize: 1,      
+      highlightColor: '#5e7e3e',
+      headerColor: '#193219',
+      mainBgColor: '#080808',
+      cardBgColor: '#222031',
+      cardHeaderColor: '#252f33',
+      textColor: '#d8d8d8',
+      darkMode: false,
+      animations: true,
       titleText: 'web projects of Mike Donovan',
       menuOn: false,
       projects: projects,
+      numberOfProjects: null,
+      projectsSeen: [0],
+      currentProject: 0,
+      previousProject: 0,
+      optionData: [],
+      dataReady: false,
       toggleMenu: () => {
         this.menuOn = !this.menuOn;
-      }   
+      }
     }
   },
   name: 'app',
   components: {
     Header,
     Footer,
-    MainBody,
-    Menu,
-    ScreenGrabber
+    MainBody
   },
-  created: function() {
+  computed: {
+    scrollAmount: () => {
+      // second one must equal card spacing!
+      return window.CARD_HEIGHT + (window.CARD_SPACING);
+    }
+  },
+  created: function() {   
+    
     this.landscape = window.innerWidth > window.innerHeight;
-    window.HEADER_HEIGHT =
-      window.innerWidth < window.innerHeight
-        ? Math.round(window.innerWidth * 0.16 - window.innerHeight * 0.01)
-        : Math.round(window.innerHeight * 0.12 - window.innerWidth * 0.01);
-    window.MAIN_PADDING = Math.round(window.HEADER_HEIGHT / 5.5);
-    console.log('h', window.HEADER_HEIGHT);
-    console.log('mp', window.MAIN_PADDING);
-    document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
-    document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
-    // this.titleText = (window.innerWidth / window.innerHeight).toPrecision(3);
-    // window.addEventListener('resize', () => {
-    //   this.titleText = (window.innerWidth / window.innerHeight).toPrecision(3);
-    // })
+    this.numberOfProjects = Object.keys(projects).length;
+    setScreenDimensions();
+    window.CLICK_METHOD = 'onpointerdown' in window ? 'onpointerdown' : 'ontouchstart' in window ? 'ontouchstart' : 'onclick';   
+    console.error('HEADER_HEIGHT', window.HEADER_HEIGHT);
+    console.error('MAIN_PADDING', window.MAIN_PADDING);
+    console.error('HIGHLIGHT_WIDTH', window.HIGHLIGHT_WIDTH);
+    console.error('CARD_SPACING', window.CARD_SPACING);
+    console.error('CLICK_METHOD', window.CLICK_METHOD);
+    console.error('IMG_EXTENSION', window.IMG_EXTENSION);
+    this.optionData = optionData;
+    this.dataReady = true;    
+    window.addEventListener('resize', setScreenDimensions)
+  },
+  mounted() {
+    let swipeDetector = new SwipeDetector(this);
+    console.log(this.$el)
+    swipeDetector.setInputs(this.$el);
+  },
+  methods: {
+    // setScreenDimensions() {
+    //   window.HEADER_HEIGHT =
+    //     window.innerWidth < window.innerHeight
+    //       ? Math.round(window.innerWidth * 0.16 - window.innerHeight * 0.01)
+    //       : Math.round(window.innerHeight * 0.12 - window.innerWidth * 0.01);
+    //   window.HEADER_HEIGHT += window.HEADER_HEIGHT % 2;          
+    //   window.MAIN_PADDING = Math.round(window.HEADER_HEIGHT / 5.5);
+    //   window.DEFAULT_HIGHLIGHT_WIDTH = 1;
+    //   window.HIGHLIGHT_WIDTH = 1;
+    //   window.CARD_SPACING = window.MAIN_PADDING * 1;
+    //   document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
+    //   document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
+    //   document.documentElement.style.setProperty('--highlight-width', window.HIGHLIGHT_WIDTH + 'px');
+    //   document.documentElement.style.setProperty('--card-spacing', window.CARD_SPACING + 'px');
+    // },
+    reportScreenUrls(projectIndex, screensArray) {
+      this.projects[projectIndex].screenshots = screensArray;
+      // for (let screenType in screensArray) {
+      //   screensArray[screenType].map((screenUrl, i) => {
+      //     console.log('creating image with url', screenUrl)
+      //     let image = new Image(screenUrl);
+      //     image.classList.add('screenshot')
+      //     console.log('created', image)
+      //     this.projects[projectIndex].screenshots[screenType][i] = image;
+      //   })
+      // }
+      console.log('CHANGED TO', this.projects[projectIndex].screenshots)
+    },
+    scrollProjects(direction) {
+      let newIndex = this.currentProject + direction;
+      if (newIndex >= 0 && newIndex < this.numberOfProjects) {
+        let listEl = document.getElementById('app');
+        console.log('curent', this.scrollAmount)
+        listEl.scrollBy({ top:( this.scrollAmount ) * direction, behavior: 'smooth' });
+        console.warn('on proj', this.currentProject)
+        // listEl.style.transform = `translateY(${this.scrollAmount * direction})`;
+        this.currentProject = newIndex;
+        if (this.projectsSeen.indexOf(this.currentProject) === -1) {
+          this.projectsSeen.push(this.currentProject);
+          if (this.projectsSeen.length === this.numberOfProjects) {
+            console.error('ALL SEEN');
+          }
+        }
+      }
+    },
+    switchProjects(projectIndex, direction) {
+      let listEl = document.getElementById('app');
+      let newIndex = projectIndex;
+      if (direction) {
+        newIndex = this.currentProject + direction;
+        if (newIndex < 0 || newIndex >= this.numberOfProjects) {
+          return;
+        }
+      }
+      this.previousProject = this.currentProject;
+      this.currentProject = newIndex;
+      if (this.projectsSeen.indexOf(this.currentProject) === -1) {
+        this.projectsSeen.push(this.currentProject);
+        if (this.projectsSeen.length === this.numberOfProjects) {
+          console.error('ALL SEEN');
+        }
+      }
+    },
+    toggleOption(option) {
+      console.log('changing', option, 'to', !this[option], 'while', this[option]);
+      let newValue = !this[option];
+      // if (option === 'wavyMode') {
+      //   document.querySelector('#app').classList.remove('wavy')
+      //   return;
+      // }
+      this[option] = newValue;
+      if (option === 'darkMode') {
+        if (newValue) {
+          console.error('starting starfield');
+          window.SPACE_BACKGROUND.classList.add('showing');
+          document.getElementById('space-bg').play();
+        } else {
+          console.error('stopping starfield')
+          window.SPACE_BACKGROUND.classList.remove('showing');
+          document.getElementById('space-bg').pause();
+        }
+      }
+    },
+    setOption(option, newValue) {
+      console.log('changing', option, 'to', newValue, 'while', this[option]);
+      let cssVar = this.optionData.filter(opt => opt.name === option)[0].cssVar;
+      console.log('setting var', cssVar)
+      this[option] = newValue;
+      document.documentElement.style.setProperty(cssVar, newValue);
+    },
+    adjustRangedOption(option, newValue) {
+      if (option === 'waveRadius') {
+        this.waveRadius = newValue;
+        let newRadius = Math.round(window.HEADER_HEIGHT * (newValue / 100));
+        if (newRadius === 0) {
+          this.wavyMode = false;
+        } else if (!this.wavyMode) {
+          this.wavyMode = true;
+        }
+        document.documentElement.style.setProperty('--arc-radius', newRadius + 'px')
+      } else if (option === 'borderSize') {
+        let cssVar = this.optionData.filter(opt => opt.name === option)[0].cssVar;
+        console.log('setting var', cssVar)
+        this.borderSize = parseInt(newValue);
+        window.HIGHLIGHT_WIDTH = window.DEFAULT_HIGHLIGHT_WIDTH + ((this.borderSize) - window.DEFAULT_HIGHLIGHT_WIDTH);
+        document.documentElement.style.setProperty(cssVar, window.HIGHLIGHT_WIDTH + 'px')
+      }
+    }
   }
 }
 </script>
@@ -74,43 +253,176 @@ export default {
   --view-height: 100vh;  
   /* --header-height: calc(var(--view-height) * 0.08); */
   --header-height: calc(16vmin - 1vmax);
-  /* --footer-height: calc(var(--view-height) * 0.09); */
-  --footer-height: var(--header-height);
+  --footer-height: calc(var(--header-height) * 1.25);
+
+  --arc-radius: calc(var(--main-padding) * 2);
+  --arc-radius: calc(var(--header-height) / 1.5);
+  --arc-diameter: calc(var(--arc-radius) * 2);
+  
+  /* --footer-height: var(--header-height); */
   /* --main-padding: 3vmin; */
+
   --main-padding: calc(var(--header-height) / 5.5);
   --inner-padding: calc(var(--main-padding) / 2);
-  --pane-height: calc(var(--view-height) - var(--header-height) - (var(--main-padding) * 2.5));
-  --pane-spacing: calc(var(--main-padding) * 2);
+
+  --highlight-width: calc(var(--main-padding)  * 2);
+  --highlight-width: 1;
+
+  /* --card-spacing: calc(var(--highlight-width) * 8); */
+  --card-spacing: calc(var(--main-padding) * 0.1);
+
+  --card-height: calc(var(--view-height) - var(--header-height) - var(--footer-height) - (var(--card-padding) * 2));
+
+  --main-font: 'Roboto';
+  
+  --header-color: #2d382a;
+  --card-bg-color: #33323b;
+  --main-bg-color: #080808;
+  --card-header-color: #252f33;
+  --highlight-color: #4e5c40;
   --main-text-color: #d8d8d8;
-  --pane-bg-color: rgb(70, 66, 60);
+  
+  --off-white: #b9b9b9;
+  --sheer-white: #ffffff09;
+
   --desktop-ratio: 0.5625;
   --tablet-ratio: 0.75;
   --tablet-ratio: 0.625;
   --portrait-ratio: 0.5625;
-  --screenshot-area-height: 80vw;
-  --screenshot-width: 60vw;
-  --screenshot-height: calc(var(--screenshot-width) * var(--desktop-ratio));
 
-  --phone-screenshot-height: calc(var(--screenshot-height) * 1.3);  
-	--phone-screenshot-width: calc(var(--phone-screenshot-height) * (var(--portrait-ratio)));
+  /* --screenshot-area-height: calc(var(--header-height) * 5.75); */
+  --screenshot-area-height: calc(var(--card-height) / 2.75);
+  --screenshot-area-width: calc(var(--main-column-width) - var(--main-padding));
+  
+  /* --monitor-height: calc(var(--screenshot-area-height) / 1.9);
+  --monitor-width: calc(var(--monitor-height) / var(--desktop-ratio)); */
+
+  --monitor-width: calc(var(--screenshot-area-width) * 0.65);
+  --monitor-height: calc(var(--monitor-width) * var(--desktop-ratio));
+
+  /* --phone-screenshot-height: calc(var(--screenshot-area-height) / 1.35);  
+	--phone-screenshot-width: calc(var(--phone-screenshot-height) * (var(--portrait-ratio))); */
+
+	--phone-screenshot-width: calc(var(--screenshot-area-width) * 0.25);
+  --phone-screenshot-height: calc(var(--phone-screenshot-width) / var(--portrait-ratio));  
+
+
 	--phone-width: calc(var(--phone-screenshot-width) * 1.035);
-	--phone-height: calc(var(--phone-screenshot-height) * 1.2);
-	--monitor-width: calc(var(--screenshot-width) * 1.06);
-	--monitor-height: calc(var(--screenshot-height) * 1.42);
-	--tablet-screenshot-height: calc(var(--monitor-height) * 0.6);
+  --phone-height: calc(var(--phone-screenshot-height) * 1.2);
+  
+	--tablet-screenshot-height: calc(var(--screenshot-area-height) * 0.45);
 	--tablet-screenshot-width: calc(var(--tablet-screenshot-height) / var(--tablet-ratio));
+	/* --tablet-screenshot-height: calc(var(--tablet-screenshot-width) * var(--tablet-ratio)); ; */
 	--tablet-width: calc(var(--tablet-screenshot-width) * 1.1);
 	--tablet-height: calc(var(--tablet-screenshot-height) * 1.1);
+  
   --hamburger-size: calc(var(--header-height) - (var(--main-padding) * 3));
-  --off-white: rgb(185, 185, 185);
 
   --main-font-size: calc((var(--header-height) / 16) + 0.4rem);
-  --title-font-size: calc((var(--header-height) / 5) + 0.4rem);
+  --title-font-size: calc((var(--header-height) / 4.25) + 0.4rem);
 
-  /* --main-column-width: calc(100vw - (var(--main-padding) * 2)); */
+  --main-column-width: calc(100vw - (var(--main-padding) * 2));
+  --animation-setting: initial;
+  --shift-speed: 540ms;
 }
+h2 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--title-font-size);
+}
+
+#app.no-animations * {
+  transition: none !important;
+}
+#app.dark {
+  --header-color: #000000;
+  --project-header-color: #15380a;
+  --highlight-color: rgb(94, 126, 62);
+  --card-bg-color: transparent;
+  --off-white: #999;
+}
+#app #page-header {
+  box-sizing: content-box;
+  border-bottom: var(--highlight-width) solid var(--highlight-color);
+  border-left: var(--highlight-width) solid var(--highlight-color);
+}
+#app #page-footer {
+  box-sizing: content-box;
+  border-top: var(--highlight-width) solid var(--highlight-color);
+  border-right: var(--highlight-width) solid var(--highlight-color);
+}
+#app #menu {
+  border-left: var(--highlight-width) solid var(--highlight-color);
+  border-bottom: var(--highlight-width) solid var(--highlight-color);
+  /* box-shadow: 0 0 0 var(--highlight-width) var(--highlight-color); */
+}
+
 .fade-enter, .fade-leave-to {
+  opacity: 0.5;
+}
+.fade-enter-to, .fade-leave {
+  opacity: 1;
+}
+
+.dim-enter, .dim-leave-to {
+  opacity: 0.5;
+}
+.dim-enter-to, .dim-leave {
+  opacity: 1;
+}
+
+.switch-enter, .switch-leave-to {
+  transform: scale(0.8);
   opacity: 0;
+}
+.switch-leave-to, .switch-enter {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.card-up-enter-to, .card-down-enter-to {
+  /* transform: translateY(0%); */
+  /* opacity: 1; */
+}
+.card-up-enter, .card-down-leave-to {
+  transform: translateY(calc(var(--card-height) + var(--card-spacing) + var(--card-spacing)));
+  opacity: 0;
+}
+.card-up-leave-to, .card-down-enter {
+  opacity: 0;
+  transform: translateY(calc((var(--card-height) + var(--card-spacing) + var(--card-spacing)) / -1 ));
+}
+
+.card-forward-enter-to, .card-back-enter-to {
+  transform: translateX(0%);
+  opacity: 1;
+}
+.card-forward-enter, .card-back-leave-to {
+  transform:  scale(0.9) translateX(calc(var(--card-height) / 3 ));
+  opacity: 0;
+}
+.card-forward-leave-to, .card-back-enter {
+  opacity: 0;
+  transform: scale(0.9) translateX(calc(var(--card-height) / -3 ));;
+}
+
+.card-next-enter {
+  transform: translateX(calc(var(--card-height) + var(--card-spacing)));
+}
+.card-next-enter-to {
+  transform: translateX(0%);
+}
+.card-next-leave-to {
+  transform: translateX(calc((var(--card-height) + var(--card-spacing)) * -1));
+}
+.card-previous-enter {
+  transform: translateX(calc((var(--card-height) + var(--card-spacing)) * -1));
+}
+.card-previous-enter-to {
+  transform: translateX(0%);
+}
+.card-previous-leave-to {
+  transform: translateX(calc(var(--card-height) + var(--card-spacing)));
 }
 .slide-enter {
 	transform: translateX(100%);
@@ -124,31 +436,73 @@ export default {
 .slide-leave-to {
   transform: translateX(100%);
 }
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  background: rgb(50, 59, 50);
-  -webkit-tap-highlight-color: transparent;
-  overflow: hidden;
-}
-/* body::after {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  height: var(--header-height);
-  color: #333;
-  content: '';
-  padding: 1vh;
-  font-size: var(--main-font-size);
-  font-family: Roboto;
-  z-index: 2;
-  pointer-events: none;
-} */
 .clickable {
   cursor: pointer;
 }
+.stroke {
+  text-shadow:
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
+.corner-arc .corner-arc-box::after, 
+header, 
+footer, 
+.project-card, 
+.project-header, 
+.card-footer, 
+#menu {
+  transition: border-radius calc(var(--shift-speed) / 2) ease;
+}
+#app:not(.wavy) .corner-arc .corner-arc-box::after, 
+#app:not(.wavy) header, 
+#app:not(.wavy) footer, 
+#app:not(.wavy) .project-card, 
+#app:not(.wavy) .project-header, 
+#app:not(.wavy) .card-footer, 
+#app:not(.wavy) #menu {
+  border-radius: 0;
+}
+.corner-arc-box {
+  position: absolute;
+  overflow: hidden;
+  width: var(--arc-radius);
+  height: var(--arc-radius);
+  background: transparent;
+}
+.corner-arc-box::after {
+  position: absolute;
+  width: calc(var(--arc-diameter) - (var(--highlight-width) * 2));
+  height: calc(var(--arc-diameter) - (var(--highlight-width) * 2));
+  content: '';
+  border-radius: 50%;
+  pointer-events: none;
+  background: transparent;
+  border: var(--highlight-width) solid var(--highlight-color);
+}
+.northeast > .corner-arc-box {
+  transform-origin: top right;
+}
+.northeast > .corner-arc-box::after {
+  transform: translate(calc(var(--arc-radius) * -1), 0);
+  box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / -3) 0px var(--header-color);
+}
+.northwest > .corner-arc-box::after {
+  transform: translate(0, 0);
+}
+.southeast > .corner-arc-box::after {
+  transform: translate(-50%, -50%);
+}
+.southwest > .corner-arc-box {
+  transform: translate(-100%, -100%);
+}
+.southwest > .corner-arc-box::after {
+  left: 0;
+  bottom: 0;
+  box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / 3) 0px var(--header-color);  
+}
+
 #body-shade {
 	content: '';
 	position: fixed;
@@ -170,7 +524,7 @@ header, footer {
 #app {
   height: var(--view-height);
   /* width: 100%; */
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--main-text-color);
@@ -182,15 +536,43 @@ header, footer {
   grid-template-rows: var(--header-height) 1fr var(--footer-height);
   scroll-padding-top: calc(var(--header-height) + (var(--main-padding)));
   overflow-y: auto;
+  overflow-x: hidden;
   justify-content: center;
   align-items: center;
 }
 #project-list {
 	display: grid;
-	grid-row-gap: calc(var(--pane-spacing) * 1);
-	grid-column-gap: var(--pane-spacing);
+	grid-row-gap: var(--card-spacing);
+	grid-column-gap: var(--main-padding);
   transition: opacity 600ms ease;
-  padding: var(--pane-spacing) 0;
+  padding: var(--card-spacing) 0;  
+}
+@media (orientation: portrait) {
+  :root {
+    --card-height: calc(var(--view-height) - var(--header-height) - var(--footer-height) -  var(--card-spacing) -  var(--card-spacing)); 
+  }
+  #app.spa {
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+  .spa #project-list {
+    margin-bottom: var(--footer-height);
+  }
+  .spa #page-footer {
+    position: fixed;
+    width: 100vw;
+    height: var(--footer-height);
+    /* bottom: 0;     */
+    top: calc(var(--view-height) - var(--footer-height));
+    z-index: 1;
+  }
+  .spa .project-card {
+    position: absolute;
+    top: calc(var(--header-height) + var(--card-spacing));
+    left: 0;
+    /* height: var(--card-height); */
+    /* margin-bottom: calc(var(--card-spacing) * 2); */
+  }
 }
 @media (orientation: landscape) {
 	:root {    
@@ -199,7 +581,7 @@ header, footer {
     --screenshot-area-height: calc(var(--header-height) * 4);
     --screenshot-height: calc(var(--screenshot-area-height) / 2.35);
     --screenshot-width: calc(var(--screenshot-height) / var(--desktop-ratio));
-    --pane-height: calc(var(--view-height) - var(--header-height) - (var(--pane-spacing) * 2));
+    --card-height: calc(var(--view-height) - var(--header-height) - (var(--card-spacing) * 2));
 	}
   .slide-enter {
 	  transform: translateY(-100%);
@@ -278,8 +660,8 @@ header, footer {
     overflow: hidden;
   }
   #page-header {
-    border-bottom-left-radius: var(--header-height);
-    border-bottom-right-radius: var(--header-height);
+    border-bottom-left-radius: var(--arc-radius);
+    border-bottom-right-radius: var(--arc-radius);
   }
   #hamburger-button.clickable, #hamburger {
     background: transparent;
@@ -290,12 +672,12 @@ header, footer {
   #page-footer #upper-left-piece {
     display: none;
   }
-  .body-pane {
+  .project-card {
     min-width: calc(var(--screenshot-area-height) * 1.75);
     margin: 0;
   }
-  .body-pane:not(:last-of-type) {
-    margin-right: var(--pane-spacing);
+  .project-card:not(:last-of-type) {
+    margin-right: var(--card-spacing);
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 979px) {
