@@ -5,12 +5,10 @@
 			mode === `settingsMode` && `settings-mode`,
 		]'
 	>		
-		<!-- <div class='upper-left-piece wavy-corner'></div> -->
 		<div class='corner-arc northeast upper wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
 		</div>
-
 		<!-- PROJECTS -->
 		<span v-if='mode === `projectsMode`'>
 			<div class='menu-header-area'>
@@ -59,35 +57,34 @@
 			<div id='option-list'>
 				<Toggle 
 					v-for='option in toggledOptions'
-					:key='option.id'					
+					:key='option.inputType + option.id'					
 					:option='option'
 					:on='options[option.name]'
 					:toggleOption='() => toggleOption(option.name)'
 				/>
 				<Slider 
 					v-for='option in rangedOptions'
-					:key='option.id'
+					:key='option.inputType + option.id'
 					:class='[option.inputType]'
 					:option='option'
 					:adjustRangedOption='adjustRangedOption'
 					:rangeValue='parseInt(options[option.name])'
 				>
 				</Slider>
-				<div id='color-area'>
+				<!-- <div id='color-area'>
 					<ColorPicker
 						v-for='option in colorOptions'
-						:key='option.id'
+						:key='option.inputType + option.id'
 						:class='[option.inputType]'
 						:option='option'
 						:setOption='setOption'
 						:colorValue='options[option.name]'
 					/>
-				</div>
+				</div> -->
 			</div>
 
 		</span>
 
-		<!-- <div class='lower-right-piece wavy-corner'></div> -->
 		<div class='corner-arc northeast lower wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
@@ -135,8 +132,8 @@ export default {
 			return optionData.filter(option => option.inputType === 'toggle');
 		},
 		rangedOptions() {
-			// return optionData.filter(option => option.inputType === 'range');
-			return [];
+			return optionData.filter(option => option.inputType === 'range');
+			// return [];
 		},
 		colorOptions() {
 			return optionData.filter(option => option.inputType === 'color');
@@ -194,9 +191,8 @@ export default {
 	right: 0;
 	color: var(--main-text-color);
 	font-size: calc(var(--main-font-size) * 1.1);
-	transition: transform var(--shift-speed) ease, border-radius calc(var(--shift-speed) / 2) ease;
+	transition: transform var(--shift-speed) ease;
 	z-index: 2;
-	border-bottom-left-radius: calc(var(--badge-size) / 1.25);
 	border-bottom-left-radius: var(--arc-radius);
 	background: var(--header-color);
 }

@@ -1,9 +1,9 @@
 <template>
 <Touchable
-  :class='[option.inputType, on && `on`]'
+  :class='[option.inputType, togglePosition && `on`]'
   :pointerDownAction='toggleOption'
 >
-	{{ option.title }}
+	<div>{{ option.title }}</div>
   <div class='groove'> 
     <div class='knob'></div>
   </div>
@@ -19,6 +19,15 @@ export default {
     option: Object,
     on: Boolean,
     toggleOption: Function
+	},
+	computed: {
+		togglePosition() {
+			if (this.option.name === 'noScroll') {
+				return !this.on
+			} else {
+				return this.on
+			}
+		}
 	},
 	created() {
 		console.warn('toggle')
@@ -36,10 +45,13 @@ export default {
 	border-radius: calc(var(--inner-padding) / 2);
   align-items: center;
   box-sizing: content-box;
-  width: unset;
   justify-self: center;
-  width: max-content;
-  min-width: 60%;
+  width: min-content;
+	min-width: 60%;
+}
+.toggle > div:first-child {
+	width: 50%;
+	text-align: left;
 }
 .groove {
 	border: 1px solid var(--off-white);

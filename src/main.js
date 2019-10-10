@@ -3,11 +3,6 @@ import App from './App.vue';
 
 requestAnimationFrame(() => { document.body.classList.remove('hidden') });
 
-
-window.addEventListener('DOMContentLoaded', () => {
-  // document.body.classList.remove('hidden');
-});
-
 Vue.config.productionTip = false;
 // document.documentElement.style.setProperty('--view-height', window.innerHeight + 'px');
 console.warn('seet view height to', window.innerHeight + 'px');

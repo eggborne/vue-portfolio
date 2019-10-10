@@ -1,18 +1,5 @@
 <template>
-<header id='page-header'>
-  <transition name='slide'>	
-    <Menu 
-      :mode='menuMode'
-      :toggleMenu='toggleMenu' 
-      :projects='projects'
-      :switchProjects='switchProjects'
-      :class='menuOn && `activated`'
-      :options='options'
-      :toggleOption='toggleOption'
-      :setOption='setOption'
-      :adjustRangedOption='adjustRangedOption'
-    />
-  </transition>
+<header id='page-header'>  
   <div id='menu-button-area' :class='[menuOn && `showing`, menuMode === `projectsMode` ? `projects-mode` : `settings-mode`]'>
     <Touchable id='settings-button' class='menu-button clickable' :pointerDownAction='() => menuMode = `settingsMode`'>
       <i class="material-icons"> settings </i>
@@ -22,7 +9,7 @@
     </Touchable>
   </div>
   <h1 
-    :class='menuOn && `truncated`'
+    :class='[menuOn && `truncated`, `stroke`]'
     id='title-text'    
   >
     <span
@@ -36,10 +23,19 @@
   <Touchable id='hamburger-button' :pointerDownAction='toggleMenu'>
     <Hamburger :menuOn='menuOn' />
   </Touchable>
-  <!-- </div> -->
-  <!-- <div class='lower-right-piece wavy-corner'> -->
-    
-  <!-- </div> -->
+  <transition name='slide'>	
+    <Menu 
+      :mode='menuMode'
+      :toggleMenu='toggleMenu' 
+      :projects='projects'
+      :switchProjects='switchProjects'
+      :class='menuOn && `activated`'
+      :options='options'
+      :toggleOption='toggleOption'
+      :setOption='setOption'
+      :adjustRangedOption='adjustRangedOption'
+    />
+  </transition>
 </header>
 </template>
 
@@ -102,7 +98,6 @@ export default {
   justify-content: space-between;
   z-index: 3;
   background: var(--header-color);
-  /* transition: border var(--shift-speed) ease; */
 }
 h1 {
   font-weight: normal 
@@ -123,6 +118,7 @@ h1 {
 #title-text > span {
   transform-origin: center right;
   transition: opacity 200ms ease, transform 100ms ease;
+  width: min-content;
 }
 #title-text > span.hidden {
   opacity: 0;

@@ -1,6 +1,6 @@
 <template>
 	<div id='main-body'>
-		<div v-if='loaded && !spaMode' id='project-list'>
+		<div v-if='loaded && !noScroll' id='project-list'>
 			<ProjectCard
 				v-for='(proj, i) in projects'
 				:key='proj.id'
@@ -13,12 +13,12 @@
 				:reportScreenUrls='reportScreenUrls'
 			/>
 		</div>
-		<div v-if='loaded && spaMode' id='project-list'>
+		<div v-if='loaded && noScroll' id='project-list'>
 			<transition-group :name='previousProject < currentProject ? `card-up` : `card-down`'>
 			<ProjectCard
 				v-for='(proj, i) in projectsToShow'
 				:key='proj.id'
-				:spaMode='spaMode'
+				:noScroll='noScroll'
 				:project='proj'
 				:index='i'
 				:listIndex='sortedProjectList.indexOf(proj)'
@@ -45,7 +45,7 @@ export default {
 		menuOn: Boolean,
 		toggleMenu: Function,
 		landscape: Boolean,
-		spaMode: Boolean,
+		noScroll: Boolean,
 		currentProject: Number,
 		previousProject: Number,
 		projectsSeen: Array,
@@ -87,6 +87,7 @@ ul {
 	align-items: center;
 	/* padding: var(--main-padding); */
 	width: 100vw;	
+	overflow-x: hidden;
 }
 @media screen and (orientation: landscape) {
 	#main-body {

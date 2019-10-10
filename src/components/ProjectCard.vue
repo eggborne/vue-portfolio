@@ -5,7 +5,11 @@
 	<a :name='`proj-${index}`' />
 	
 	<header class='project-header stroke'>
-		<div class='corner-arc southwest wavy-corner'>
+		<div class='corner-arc southwest upper wavy-corner'>
+			<div class='corner-arc-box'>
+			</div>
+		</div>
+		<div class='corner-arc northwest upper wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
 		</div>
@@ -16,6 +20,9 @@
 			{{ project.name }}
 		</h2>
 		<div class='title-description'>{{ project.description }}</div>
+		<div class='corner-arc northeast upper wavy-corner'>
+			<div class='corner-arc-box'></div>
+		</div>
 	</header>
 	<div class='tech-area'>
 		<div
@@ -79,10 +86,18 @@
 			</i>
 			<div>Visit Website</div>
 		</div>
-	<div class='corner-arc northeast wavy-corner'>
-		<div class='corner-arc-box'>
+		<div class='corner-arc southwest lower wavy-corner'>
+			<div class='corner-arc-box'>
+			</div>
 		</div>
-	</div>
+		<div class='corner-arc southeast lower wavy-corner'>
+			<div class='corner-arc-box'>
+			</div>
+		</div>
+		<div class='corner-arc northeast lower wavy-corner'>
+			<div class='corner-arc-box'>
+			</div>
+		</div>
 	</footer>	
 </div>
 </template>
@@ -117,7 +132,7 @@ export default {
 	},
 	name: 'ProjectCard',
 	props: {
-		spaMode: Boolean,
+		noScroll: Boolean,
 		msg: String,
 		project: Object,
 		index: Number,
@@ -247,19 +262,20 @@ export default {
 	width: 100vw;
 	height: var(--card-height);
 	min-height: 100vw;
+	max-height: var(--card-height);
 	display: grid;
 	grid-template-rows: 
-		var(--footer-height)
-		calc( var(--header-height) / 1.25) 
-		/* auto */
-		var(--screenshot-area-height)
+		calc(var(--header-height) * 1.2)
+		calc(var(--header-height) / 1.25) 
 		1fr
-		var(--footer-height)
+		/* var(--screenshot-area-height) */
+		calc(var(--header-height) / 1.25) 
+		calc(var(--header-height) * 1.2)
 	;
 	justify-items: stretch;
 	background-color: var(--card-bg-color);
 	color: var(--main-text-color);
-	transition: transform var(--shift-speed) ease, opacity var(--shift-speed) ease, border-radius calc(var(--shift-speed) / 2) ease;
+	transition: transform var(--shift-speed) ease, opacity var(--shift-speed) ease;
 	will-change: transform;
 	transform-origin: center;
 }
@@ -281,18 +297,45 @@ export default {
 #app .project-card .southwest .corner-arc-box::after {
 	border: 0;
 }
-.southwest > .corner-arc-box {
+.southwest.upper > .corner-arc-box {
 	top: 0;
-	left: calc(var(--arc-radius) - (var(--highlight-width) * 2));
+	/* left: calc(var(--arc-radius) - (var(--highlight-width) * 2)); */
+	left: calc(var(--arc-radius));
 }
-.southwest > .corner-arc-box::after {
+.southwest.upper > .corner-arc-box::after {
 	box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / 3) 0px var(--card-header-color);
 }
-.northeast > .corner-arc-box {
+.southwest.lower > .corner-arc-box {
+	top: 0;
+	/* left: calc(var(--arc-radius) - (var(--highlight-width) * 2)); */
+	left: calc(var(--arc-radius));
+}
+.southwest.lower > .corner-arc-box::after {
+	box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / 3) 0px var(--card-header-color);
+}
+.northwest.upper > .corner-arc-box {
+	bottom: calc(var(--arc-radius) * -1);
+	/* left: calc(var(--highlight-width) * -2); */
+	left: 0;
+}
+.southeast.lower > .corner-arc-box {
+	top: calc(var(--highlight-width));;
+ 	right: calc(var(--highlight-width) * -1);
+}
+.northeast.lower > .corner-arc-box {
 	bottom: calc(var(--arc-radius) * -1);
 	right: calc(var(--highlight-width) * -3);
 }
-.northeast > .corner-arc-box::after {
+.northeast.lower > .corner-arc-box::after {
+	box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / -3) 0px var(--card-header-color);
+	border: 0;
+}
+.northeast.upper > .corner-arc-box {
+	bottom: calc(var(--arc-radius) * -1);
+	right: calc(var(--highlight-width) * -2);
+	/* right: 0; */
+}
+.northeast.upper > .corner-arc-box::after {
 	box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / -3) 0px var(--card-header-color);
 	border: 0;
 }
@@ -307,6 +350,7 @@ a {
 	position: absolute;
 }
 .project-header {	
+	position: relative;
 	background: var(--card-header-color);
 	display: grid;
 	grid-template-columns: var(--header-height) 1fr;
@@ -320,6 +364,8 @@ a {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 	border-top-right-radius: var(--arc-radius);
+	/* border-bottom-left-radius: var(--arc-radius); */
+
 }
 .project-link {
 	font-size: var(--main-font-size);
@@ -402,7 +448,8 @@ a {
 .tech-area {
 	display: flex;
 	align-items: center;
-	padding: 0 var(--main-padding);
+	padding: 0 calc(var(--main-padding) + (var(--arc-radius)) / 2);
+	padding-top: calc(var(--arc-radius) / 8);
 }
 .bullet-area {
 	display: flex;
@@ -411,8 +458,8 @@ a {
 	align-items: stretch;
 	justify-content: space-evenly;
 	max-height: 100%;
-	padding: var(--main-padding);
-	/* background: rgba(207, 207, 34, 0.19); */
+	padding: 0 calc(var(--main-padding) + (var(--arc-radius)) / 4);
+	padding-bottom: calc(var(--inner-padding) + (var(--arc-radius)) / 4);
 }
 .bullet-entry {
 	display: flex;
@@ -461,14 +508,18 @@ a {
 .screenshot-area {
 	position: relative;
 	width: var(--screenshot-area-width);
+	height: min-content;
 	max-width: 100vw;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
 	justify-self: center;
+	/* align-self:center; */
+	padding-top: var(--main-padding);
 }
 .card-footer {
 	/* margin: var(--inner-padding); */
+	position: relative;
 	display: flex;
 	align-items: stretch;
 	justify-content: center;

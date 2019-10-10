@@ -1,6 +1,7 @@
 <template>
 <div>
-	<div>{{ option.title }}</div>
+	<div>{{ option.title }}	{{ currentValue }}</div>
+		
 	<input 
 		v-on:input='() => adjustRangedOption(option.name, currentValue)' 
 		v-model='currentValue' 
@@ -39,7 +40,7 @@ export default {
 	background: var(--sheer-white);
 	border: 0;
 	max-width: 100%;
-	height: calc(var(--header-height) * 1.25);
+	height: var(--header-height);
 	border-radius: calc(var(--inner-padding) / 2);
 	display: grid;
 	grid-template-columns: 1fr;
@@ -47,8 +48,12 @@ export default {
 	justify-items: end;
 	align-items: center;
 	align-content: center;
-	padding-top: calc(var(--main-padding) / 1);
-	padding-bottom: calc(var(--main-padding) / 1.5);
+	padding-top: calc(var(--main-padding) / 2);
+	padding-bottom: calc(var(--main-padding) / 2);
+	background: transparent;
+}
+#option-list .range:first-of-type {
+	margin-top: calc(var(--main-padding));
 }
 div:first-child {
 	justify-self: start;	

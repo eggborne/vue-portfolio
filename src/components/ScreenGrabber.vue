@@ -44,7 +44,7 @@ ul {
 	height: 90vh;
 	padding: 2rem;
 	z-index: 24;
-	overflow: auto;
+	/* overflow: auto; */
 	pointer-events: all;
 }
 button {

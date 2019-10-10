@@ -1,6 +1,6 @@
 <template>
   <div :class='[
-      spaMode && `spa`, 
+      noScroll && `spa`, 
       wavyMode && `wavy`, 
       darkMode && `dark`,
       !animations && `no-animations`
@@ -14,7 +14,7 @@
       :switchProjects='switchProjects'
 			:menuOn='menuOn' 
 			:titleText='`web projects of Mike Donovan`'
-      :options='{spaMode: spaMode, wavyMode: wavyMode, waveRadius: waveRadius, darkMode: darkMode, 
+      :options='{noScroll: noScroll, wavyMode: wavyMode, waveRadius: waveRadius, darkMode: darkMode, 
       animations: animations,
       highlightColor: highlightColor,
       headerColor: headerColor,
@@ -34,17 +34,18 @@
       :toggleMenu='toggleMenu' 
       :projects='projects' 
       :menuOn='menuOn'
-      :spaMode='spaMode'
+      :noScroll='noScroll'
       :currentProject='currentProject'
       :previousProject='previousProject'
       :projectsSeen='projectsSeen'
       :reportScreenUrls='reportScreenUrls'
     />
-    <Footer :spaMode='spaMode' :switchProjects='switchProjects'/>
+    <Footer :noScroll='noScroll' :switchProjects='switchProjects' :scrollDirection='scrollDirection'/>
     <video v-if='darkMode' muted autoplay loop id='space-bg'>
       <source src='./assets/starfield.mp4' type='video/mp4'>
     </video>
   <!-- <ScreenGrabber /> -->
+  <div id='debug'></div>
   </div>
 </template>
 
@@ -60,26 +61,32 @@ function setScreenDimensions() {
     window.innerWidth < window.innerHeight
       ?  Math.round(window.innerWidth * 0.16 - window.innerHeight * 0.01)
       : Math.round(window.innerHeight * 0.12 - window.innerWidth * 0.01);
+      window.HEADER_HEIGHT += window.HEADER_HEIGHT % 4;
   window.MAIN_PADDING = Math.round(window.HEADER_HEIGHT / 5.5);
   window.MAIN_PADDING += window.MAIN_PADDING % 2;
-  window.DEFAULT_HIGHLIGHT_WIDTH = Math.round(window.MAIN_PADDING / 5);
-  window.HIGHLIGHT_WIDTH = Math.round(window.MAIN_PADDING / 12);
+  window.DEFAULT_HIGHLIGHT_WIDTH = Math.ceil(window.MAIN_PADDING / 12);
+  window.FOOTER_HEIGHT = window.DEFAULT_FOOTER_HEIGHT = window.HEADER_HEIGHT;
+  window.ARC_RADIUS = 50;
+  window.HIGHLIGHT_WIDTH = Math.ceil(window.MAIN_PADDING / 12);
   window.CARD_SPACING = window.MAIN_PADDING * 1;
   document.documentElement.style.setProperty('--view-height', window.innerHeight + 'px');
   document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
+  document.documentElement.style.setProperty('--footer-height', window.FOOTER_HEIGHT + 'px');
   document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
   document.documentElement.style.setProperty('--highlight-width', window.HIGHLIGHT_WIDTH + 'px');
-  document.documentElement.style.setProperty('--card-spacing', window.CARD_SPACING + 'px');
+  document.documentElement.style.setProperty('--card-spacing', window.CARD_SPACING + 'px');  
 }
 
 export default {
   data: function() { 
     return {
       landscape: false,
-      spaMode: true,
+      noScroll: true,
+      scrollDirection: 'vertical',
       wavyMode: true,
       waveRadius: 50,
       borderSize: 1,      
+      footerHeight: 3,
       highlightColor: '#5e7e3e',
       headerColor: '#193219',
       mainBgColor: '#080808',
@@ -115,25 +122,33 @@ export default {
     }
   },
   created: function() {   
-    
+    window.addEventListener('scroll', (e) => {
+      alert('cocks')
+      e.preventDefault();
+    })
     this.landscape = window.innerWidth > window.innerHeight;
     this.numberOfProjects = Object.keys(projects).length;
     setScreenDimensions();
     window.CLICK_METHOD = 'onpointerdown' in window ? 'onpointerdown' : 'ontouchstart' in window ? 'ontouchstart' : 'onclick';   
-    console.error('HEADER_HEIGHT', window.HEADER_HEIGHT);
-    console.error('MAIN_PADDING', window.MAIN_PADDING);
-    console.error('HIGHLIGHT_WIDTH', window.HIGHLIGHT_WIDTH);
-    console.error('CARD_SPACING', window.CARD_SPACING);
-    console.error('CLICK_METHOD', window.CLICK_METHOD);
-    console.error('IMG_EXTENSION', window.IMG_EXTENSION);
+    // console.error('HEADER_HEIGHT', window.HEADER_HEIGHT);
+    // console.error('MAIN_PADDING', window.MAIN_PADDING);
+    // console.error('HIGHLIGHT_WIDTH', window.HIGHLIGHT_WIDTH);
+    // console.error('CARD_SPACING', window.CARD_SPACING);
+    // console.error('CLICK_METHOD', window.CLICK_METHOD);
+    // console.error('IMG_EXTENSION', window.IMG_EXTENSION);
     this.optionData = optionData;
+    
     this.dataReady = true;    
     window.addEventListener('resize', setScreenDimensions)
   },
   mounted() {
     let swipeDetector = new SwipeDetector(this);
     console.log(this.$el)
-    swipeDetector.setInputs(this.$el);
+    swipeDetector.setInputs(document.getElementById('main-body'));
+    this.applyStoredOptions();
+    document.getElementById('debug').innerText = `
+      H_H: ${window.HEADER_HEIGHT} | F_H: ${window.FOOTER_HEIGHT}
+    `;
   },
   methods: {
     // setScreenDimensions() {
@@ -181,13 +196,19 @@ export default {
         }
       }
     },
-    switchProjects(projectIndex, direction) {
+    switchProjects(projectIndex, direction, swiped) {
       let listEl = document.getElementById('app');
       let newIndex = projectIndex;
       if (direction) {
         newIndex = this.currentProject + direction;
         if (newIndex < 0 || newIndex >= this.numberOfProjects) {
           return;
+        } else {
+          let buttonObj = document.getElementById(direction == -1 ? 'prev-button' : 'next-button');
+          buttonObj.classList.add('pressed');
+          setTimeout(() => {
+            buttonObj.classList.remove('pressed');
+          }, 220)
         }
       }
       this.previousProject = this.currentProject;
@@ -198,6 +219,27 @@ export default {
           console.error('ALL SEEN');
         }
       }
+    },
+    applyStoredOptions() {
+      console.warn('now this is', this)
+      optionData.map(option => {
+        if (this.hasOwnProperty(option.name)) {
+            console.warn('setting', option.name, this[option.name], 'to', option.defaultValue)
+            this[option.name] = option.defaultValue;
+            if (option.inputType === 'range') {
+              console.warn('ADJUSTING RANGED', option.name)
+              this.adjustRangedOption(option.name, this[option.name]);
+            }
+        }
+      });
+      console.error('HEADER_HEIGHT', window.HEADER_HEIGHT);
+      console.error('FOOTER_HEIGHT', window.FOOTER_HEIGHT);
+      console.error('MAIN_PADDING', window.MAIN_PADDING);
+      console.error('HIGHLIGHT_WIDTH', window.HIGHLIGHT_WIDTH);
+      console.error('ARC_RADIUS', window.ARC_RADIUS);
+      console.error('CARD_SPACING', window.CARD_SPACING);
+      console.error('CLICK_METHOD', window.CLICK_METHOD);
+      console.error('IMG_EXTENSION', window.IMG_EXTENSION);
     },
     toggleOption(option) {
       console.log('changing', option, 'to', !this[option], 'while', this[option]);
@@ -227,22 +269,31 @@ export default {
       document.documentElement.style.setProperty(cssVar, newValue);
     },
     adjustRangedOption(option, newValue) {
+      let cssVar = this.optionData.filter(opt => opt.name === option)[0].cssVar;
       if (option === 'waveRadius') {
-        this.waveRadius = newValue;
-        let newRadius = Math.round(window.HEADER_HEIGHT * (newValue / 100));
+        this.waveRadius =  parseInt(newValue);
+        let newRadius = Math.round(Math.round(window.HEADER_HEIGHT * 1.2) * (newValue / 100));
+        // newRadius += newRadius % 2;
         if (newRadius === 0) {
           this.wavyMode = false;
         } else if (!this.wavyMode) {
           this.wavyMode = true;
         }
-        document.documentElement.style.setProperty('--arc-radius', newRadius + 'px')
+        console.error('new radius is', newValue, '% -> ', newRadius)
+        document.documentElement.style.setProperty(cssVar, newRadius + 'px');
+        window.ARC_RADIUS = newRadius;
       } else if (option === 'borderSize') {
-        let cssVar = this.optionData.filter(opt => opt.name === option)[0].cssVar;
-        console.log('setting var', cssVar)
         this.borderSize = parseInt(newValue);
         window.HIGHLIGHT_WIDTH = window.DEFAULT_HIGHLIGHT_WIDTH + ((this.borderSize) - window.DEFAULT_HIGHLIGHT_WIDTH);
-        document.documentElement.style.setProperty(cssVar, window.HIGHLIGHT_WIDTH + 'px')
+        document.documentElement.style.setProperty(cssVar, window.HIGHLIGHT_WIDTH + 'px');
+      } else if (option === 'footerHeight') {
+        this.footerHeight = parseInt(newValue);
+        window.FOOTER_HEIGHT = Math.round((window.HEADER_HEIGHT) + ((this.footerHeight - 2) * (window.HEADER_HEIGHT / 12)));
+        document.documentElement.style.setProperty(cssVar, window.FOOTER_HEIGHT + 'px');
       }
+      document.getElementById('debug').innerText = `
+          H_H: ${window.HEADER_HEIGHT} | F_H: ${window.FOOTER_HEIGHT} | RAD: ${window.ARC_RADIUS}px | BOR: ${window.HIGHLIGHT_WIDTH}
+        `;
     }
   }
 }
@@ -253,19 +304,17 @@ export default {
   --view-height: 100vh;  
   /* --header-height: calc(var(--view-height) * 0.08); */
   --header-height: calc(16vmin - 1vmax);
-  --footer-height: calc(var(--header-height) * 1.25);
+  --footer-height: calc(var(--header-height) + (var(--main-padding)));
 
   --arc-radius: calc(var(--main-padding) * 2);
   --arc-radius: calc(var(--header-height) / 1.5);
   --arc-diameter: calc(var(--arc-radius) * 2);
   
   /* --footer-height: var(--header-height); */
-  /* --main-padding: 3vmin; */
 
   --main-padding: calc(var(--header-height) / 5.5);
   --inner-padding: calc(var(--main-padding) / 2);
 
-  --highlight-width: calc(var(--main-padding)  * 2);
   --highlight-width: 1;
 
   /* --card-spacing: calc(var(--highlight-width) * 8); */
@@ -276,6 +325,7 @@ export default {
   --main-font: 'Roboto';
   
   --header-color: #2d382a;
+  --footer-color: var(--header-color);
   --card-bg-color: #33323b;
   --main-bg-color: #080808;
   --card-header-color: #252f33;
@@ -325,6 +375,16 @@ export default {
   --animation-setting: initial;
   --shift-speed: 540ms;
 }
+
+#debug {
+  position: fixed;
+  bottom: 2px;
+  left: 4px;
+  color: white;
+  font-size: 0.75rem;  
+  z-index: 12;
+}
+
 h2 {
   margin: 0;
   padding: 0;
@@ -335,8 +395,9 @@ h2 {
   transition: none !important;
 }
 #app.dark {
-  --header-color: #000000;
-  --project-header-color: #15380a;
+  --header-color: #111111;
+  --footer-color: var(--header-color);
+  --card-header-color: #15380a;
   --highlight-color: rgb(94, 126, 62);
   --card-bg-color: transparent;
   --off-white: #999;
@@ -350,6 +411,7 @@ h2 {
   box-sizing: content-box;
   border-top: var(--highlight-width) solid var(--highlight-color);
   border-right: var(--highlight-width) solid var(--highlight-color);
+  max-height: unset;
 }
 #app #menu {
   border-left: var(--highlight-width) solid var(--highlight-color);
@@ -439,7 +501,7 @@ h2 {
 .clickable {
   cursor: pointer;
 }
-.stroke {
+.stroke {  
   text-shadow:
     -1px -1px 0 #000,  
     1px -1px 0 #000,
@@ -453,7 +515,7 @@ footer,
 .project-header, 
 .card-footer, 
 #menu {
-  transition: border-radius calc(var(--shift-speed) / 2) ease;
+  /* transition: border-radius calc(var(--shift-speed) / 2) ease; */
 }
 #app:not(.wavy) .corner-arc .corner-arc-box::after, 
 #app:not(.wavy) header, 
@@ -488,19 +550,31 @@ footer,
   transform: translate(calc(var(--arc-radius) * -1), 0);
   box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / -3) 0px var(--header-color);
 }
+
+/* northwest only appear on card headers/footers */
 .northwest > .corner-arc-box::after {
   transform: translate(0, 0);
+  box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / -3) 0px var(--card-header-color);
+  border: 0;
+}
+/* southeast only appear on card headers/footers */
+.southeast > .corner-arc-box {
+  transform: translate(0%, calc(var(--arc-radius) * -1));
 }
 .southeast > .corner-arc-box::after {
+   box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / 3) 0px var(--card-header-color);
+  border: 0;
   transform: translate(-50%, -50%);
 }
+
+
 .southwest > .corner-arc-box {
   transform: translate(-100%, -100%);
 }
 .southwest > .corner-arc-box::after {
   left: 0;
   bottom: 0;
-  box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / 3) 0px var(--header-color);  
+  box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / 3) 0px var(--footer-color);  
 }
 
 #body-shade {
@@ -522,6 +596,7 @@ header, footer {
   /* width: 100%; */
 }
 #app {
+  
   height: var(--view-height);
   /* width: 100%; */
   
@@ -535,7 +610,7 @@ header, footer {
   display: grid;
   grid-template-rows: var(--header-height) 1fr var(--footer-height);
   scroll-padding-top: calc(var(--header-height) + (var(--main-padding)));
-  overflow-y: auto;
+  /* overflow-y: auto; */
   overflow-x: hidden;
   justify-content: center;
   align-items: center;
@@ -588,12 +663,14 @@ header, footer {
   }
   .slide-enter-to {
     transform: translateY(0%);
+    display: none;
   }
   .slide-leave {
     transform: translateY(0%);
   }
   .slide-leave-to {
     transform: translateY(-100%);
+    display: none;
   }
   #project-list {
     grid-template-columns: 0.5fr 0.5fr;

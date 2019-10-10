@@ -165,7 +165,7 @@ export const projects = [
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'Onscreen touch controls adapt to right- or left-handed play',
+			'Gamepad support',
 			'Online leaderboard'
 		],
 		'directory':'frogracer',
@@ -310,34 +310,22 @@ export const optionData = [
 		id: 0,
 		inputType: 'toggle',
 		defaultValue: true,
-		name: 'spaMode',
-		title: 'Single Page',
+		name: 'noScroll',
+		title: 'Traditional scrolling',
 		cssVar: ''
 	},
-	{
-		id: 1,
-		inputType: 'toggle',
-		defaultValue: false,
-		name: 'wavyMode',
-		title: 'Waviness',
-		cssVar: ''
-	},
-	{
-		id: 1,
-		inputType: 'range',
-		step: 2,
-		minValue: 0,
-		maxValue: 100,
-		unitSuffix: '%',
-		defaultValue: 50,
-		name: 'waveRadius',
-		title: 'Waviness',
-		cssVar: '--arc-radius'
-	},
+	// {
+	// 	id: 1,
+	// 	inputType: 'toggle',
+	// 	defaultValue: true,
+	// 	name: 'wavyMode',
+	// 	title: 'Waviness',
+	// 	cssVar: ''
+	// },
 	{
 		id: 2,
 		inputType: 'toggle',
-		defaultValue: false,
+		defaultValue: true,
 		name: 'darkMode',
 		title: 'Space Mode',
 		cssVar: ''
@@ -351,16 +339,40 @@ export const optionData = [
 		cssVar: '--animations'
 	},
 	{
+		id: 1,
+		inputType: 'range',
+		step: 1,
+		minValue: 0,
+		maxValue: 100,
+		unitSuffix: '%',
+		defaultValue: 50,
+		name: 'waveRadius',
+		title: 'Waviness',
+		cssVar: '--arc-radius'
+	},
+	{
 		id: 4,
 		inputType: 'range',
 		step: 1,
 		minValue: 0,
-		maxValue: 10,
+		maxValue: 6,
 		unitSuffix: '',
 		defaultValue: 1,
 		name: 'borderSize',
 		title: 'Border size',
 		cssVar: '--highlight-width'
+	},
+	{
+		id: 44,
+		inputType: 'range',
+		step: 1,
+		minValue: 0,
+		maxValue: 10,
+		unitSuffix: '',
+		defaultValue: 4,
+		name: 'footerHeight',
+		title: 'Footer size',
+		cssVar: '--footer-height'
 	},
 	{
 		id: 5,

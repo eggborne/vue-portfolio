@@ -3,25 +3,23 @@
 		<div class='corner-arc southwest wavy-corner'>
 			<div class='corner-arc-box'></div>
 		</div>
-		<div v-if='spaMode' id='footer-controls'>
-			<div>
-				<div class='arrow-up'></div>
+		<div v-if='noScroll' id='footer-controls' :class='scrollDirection'>
+			<div id='prev-button'>
 				<Touchable
 					id='prev'
 					:pointerDownAction='handleClickNav'
 					:pointerUpAction='handleReleaseNav'
 				>
-					PREV
+					<span class='nav-label stroke'>PREV</span>
 				</Touchable>
 			</div>
-			<div>
-				<div class='arrow-down'></div>
+			<div id='next-button'>
 				<Touchable
 					id='next'
 					:pointerDownAction='handleClickNav'
 					:pointerUpAction='handleReleaseNav'
 				>
-					NEXT
+				<span class='nav-label stroke'>NEXT</span>
 				</Touchable>
 			</div>
 		</div>
@@ -34,18 +32,19 @@ import Touchable from './Touchable.vue';
 export default {
 	name: 'Footer',
 	props: {
-		spaMode: Boolean,
-		switchProjects: Function
+		noScroll: Boolean,
+		switchProjects: Function,
+		scrollDirection: String
 	},
 	methods: {
 		handleClickNav(e) {
 			console.log(e.target.id, 'clicked');
 			let direction = e.target.id === 'prev' ? -1 : 1;
-			e.target.classList.add(`pressed`);
+			// e.target.classList.add(`pressed`);
 			this.switchProjects(null, direction);
 		},
 		handleReleaseNav(e) {
-			e.target.classList.remove(`pressed`);
+			// e.target.classList.remove(`pressed`);
 		}
 	},
 	components: {
@@ -60,7 +59,7 @@ span {
 }
 #page-footer {
 	position: relative;
-	background: var(--header-color);
+	background: var(--footer-color);
 	justify-content: center;
 	align-self: stretch;
 }
@@ -68,31 +67,88 @@ span {
 	color: var(--header-color);
 	width: calc(var(--header-height) * 2);
 }
-#prev {
-	padding-top: calc(var(--header-height) / 2.5);
+.nav-label {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: var(--off-white);
+	display: flex;
+	align-items: center;
+	width: var(--header-height);
+	height: calc(var(--header-height) / 2.25);
+	z-index: 1;
 }
-#next {
-	padding-bottom: calc(var(--header-height) / 0);
+#next .nav-label {
+	justify-content: flex-end;
 }
-.arrow-up,
-.arrow-down {
+.stroke {
+	text-shadow:
+    -1px -1px 0 #aaa,  
+    1px -1px 0 #aaa,
+    -1px 1px 0 #aaa,
+     1px 1px 0 #aaa;
+}
+.nav-label::after {
 	position: absolute;
 	width: 0;
 	height: 0;
-	border-left: calc(var(--header-height) / 0.9) solid transparent;
-	border-right: calc(var(--header-height) / 0.9) solid transparent;
+	border-top: calc(var(--header-height) / 2.75) solid transparent;
+	border-bottom: calc(var(--header-height) / 2.75) solid transparent;
 	transform-origin: center;
-	transform: translate(
-		-50%,
-		calc((var(--footer-height) / 2) - (var(--header-height) / 2.6))
-	);
+	content: '';
+	z-index: -1;
 }
-.arrow-up {
-	border-bottom: calc(var(--header-height) / 1.3) solid var(--off-white);
+#prev .nav-label::after {
+	border-left: calc(var(--header-height) / 2) solid var(--off-white);
+	transform: translate(calc(var(--header-height) / -2.1), 0%) scaleX(-1);
+	transform-origin: left;
+	right: 0;
 }
-.arrow-down {
-	border-top: calc(var(--header-height) / 1.3) solid var(--off-white);
+#next .nav-label::after {
+	border-left: calc(var(--header-height) / 2) solid var(--off-white);
+	transform: translate(calc(var(--header-height) / 2.1), 0%);
+	right: 0;
 }
+#footer-controls.vertical .nav-label {
+	justify-content: center;
+	height: 45%;
+}
+#footer-controls.vertical .nav-label::after {
+	border: unset;
+	border-left: calc(var(--header-height) / 1.25) solid transparent;
+	border-right: calc(var(--header-height) / 1.25) solid transparent;
+	transform-origin: center;
+	left: 50%;
+}
+#footer-controls.vertical #prev .nav-label {
+	transform: translate(-50%, -40%);
+	border-top-left-radius: 50%;
+	border-top-right-radius: 50%;
+}
+#footer-controls.vertical #next .nav-label {
+	transform: translate(-50%, -70%);
+	border-bottom-left-radius: 50%;
+	border-bottom-right-radius: 50%;
+}
+#footer-controls.vertical #prev .nav-label::after {
+	top: 0;
+	transform: translate(-50%, -45%);
+	border-bottom: calc(var(--header-height) / 2.5) solid var(--off-white);
+}
+#footer-controls.vertical #next .nav-label::after {
+	bottom: 0;
+	transform: translate(-50%, 45%);
+	border-top: calc(var(--header-height) / 2.5) solid var(--off-white);
+}
+/* .horizontal #prev .nav-label::after {
+	border: unset;
+	border-left: calc(var(--footer-height) / 2.75) solid transparent;
+	border-right: calc(var(--footer-height) / 2.75) solid transparent;
+}
+.horizontal #next .nav-label::after {
+	border-top: calc(var(--footer-height) / 2) solid var(--off-white);
+} */
 #app.wavy #page-footer {
 	border-top-right-radius: var(--arc-radius);
 }
@@ -100,28 +156,36 @@ span {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 1fr;
-	align-items: stretch;
+	align-items: center;
 	justify-items: center;
 	width: 80%;
-	height: 100%;
-	/* margin: 0 calc(var(--header-height)); */
-	/* outline: 1px solid #222; */
 }
 #footer-controls button {
 	position: absolute;
-	border-radius: var(--inner-padding);
-	font-size: calc(var(--header-height) / 3.5);
-	height: 90%;
+	font-size: calc(var(--header-height) / 4);
+	height: var(--header-height);
 	font-weight: 700;
-	transition: transform 150ms ease;
-	transform: translateX(-50%);
+	transform: translate(-50%, -50%);
+	border: 0 !important;
 }
-#footer-controls button:first-of-type {
+#footer-controls .pressed span {
+	background-color: rgb(174, 216, 174) !important;
+	color: #222;
 }
-#footer-controls button:last-of-type {
+#footer-controls .pressed span::after {
+	border-left-color: rgb(174, 216, 174);
+	border-right-color: rgb(174, 216, 174);
 }
-#footer-controls button.pressed {
-	color: rgb(174, 216, 174);
+#footer-controls.vertical #prev-button.pressed span::after {
+	border-top-color: rgb(174, 216, 174);
+	border-bottom-color: rgb(174, 216, 174);
+}
+#footer-controls.vertical #next-button.pressed span::after {
+	border-top-color: rgb(174, 216, 174);
+	border-bottom-color: rgb(174, 216, 174);
+}
+#footer-controls .vertical .pressed button {
+	/* color: white */
 }
 
 .southwest > .corner-arc-box {
