@@ -2,8 +2,8 @@
 	<div
 		:class='[`icon`, `icon-${project.directory}`]'
 		:style='{
-			backgroundPositionX: `-${listIndex * size}px`,
-			width: `${size-1}px`,
+			backgroundImage: `url(${project.iconUrl})`,
+			width: `${size}px`,
 			height: `${size}px`
 		}'
 	></div>
@@ -26,11 +26,8 @@ export default {
 
 <style scoped>
 .icon {
-	background-image: url('/iconsheet.png');
+	/* background-image: url('/iconsheet.png'); */
 	background-repeat: no-repeat;
 	background-size: auto 100%;
-	background-position-y: 0;
-	font-size: 24px;
-	color: lightgreen;
 }
 </style>

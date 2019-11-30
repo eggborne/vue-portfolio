@@ -1,6 +1,7 @@
 export const techTagColors = {
 	React: 'rgb(150, 130, 100)',
 	Vue: 'rgb(66, 151, 23)',
+	VueX: 'rgb(80, 100, 0)',
 	PixiJS: 'rgb(88, 88, 207)',
 	MySQL: 'rgb(32, 73, 8)',
 	PHP: 'rgb(61, 9, 9)',
@@ -25,9 +26,9 @@ export const projects = [
 		],
 		'directory':'wagsworth',
 		'screenshots': {
-			portrait: 2,
-			desktop: 1,
-			tablet: 1,
+			portrait: 3,
+			desktop: 3,
+			tablet: 0,
 		},
 		iconUrl: 'https://wagsworthgrooming.com/favicon.ico'
 	},
@@ -83,6 +84,32 @@ export const projects = [
 	},
 	{
 		'id': 3,
+		'name': 'Crossword Creator',
+		'url': 'https://crosswords.cc',
+		'repo': 'https://github.com/eggborne/crossword-generator',
+		'description': 'Full-featured crossword puzzle creator',
+		'technologies': [
+			'Vue',
+			'VueX',
+			'PHP',
+			'MySQL',
+			'NPM',
+			'Webpack'
+		],
+		'descriptionBullets': [
+			'Generates puzzle diagrams according to defined constraints',
+			'Uses machine learning to avoid offensive patterns'
+		],
+		'directory':'crosswordscc',
+		'screenshots': {
+			portrait: 5,
+			desktop: 0,
+			tablet: 0,
+		},
+		iconUrl: 'https://crosswords.cc/img/icons/favicon192.png'
+	},
+	{
+		'id': 4,
 		'name': 'Name Generator',
 		'url': 'https://www.eggborne.com/namegenerator',
 		'repo': 'https://github.com/eggborne/customizable-name-generator',
@@ -107,7 +134,7 @@ export const projects = [
 		iconUrl: 'https://pazaak.online/assets/images/loadingicon.png'
 	},
 	{
-		'id': 4,
+		'id': 5,
 		'name': 'Brutal Kung Fu',
 		'url': 'https://brutalkungfu.com',
 		'repo': 'https://github.com/eggborne/brutal-kung-fu',
@@ -132,7 +159,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/icons/bkficon.png'
 	},
 	{
-		'id': 5,
+		'id': 6,
 		'name': 'Tetro',
 		'url': 'https://eggborne.com/tetro',
 		'repo': 'https://github.com/eggborne/tetro',
@@ -154,7 +181,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/tetro/favicon.bmp'
 	},
 	{
-		'id': 6,
+		'id': 7,
 		'name': 'Frog Racer 2019',
 		'url': 'https://eggborne.com/frogracer',
 		'repo': 'https://github.com/eggborne/frog-racer',
@@ -177,7 +204,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/frogracer/assets/favicon-med.png'
 	},
 	{
-		'id': 7,
+		'id': 8,
 		'name': 'Random Metroid',
 		'url': 'https://eggborne.com/metroid',
 		'repo': 'https://github.com/eggborne/random-metroid',
@@ -197,7 +224,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/icons/metroidicon.png'
 	},
 	{
-		'id': 8,
+		'id': 9,
 		'name': 'Cellular Automata Sandbox',
 		'url': 'https://eggborne.com/tca',
 		'repo': 'https://github.com/eggborne/cellular-automata-sandbox',
@@ -217,7 +244,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/icons/casicon.png'
 	},
 	{
-		'id': 9,
+		'id': 10,
 		'name': 'Toad\'s Odyssey',
 		'url': 'https://eggborne.com/toad',
 		'repo': 'https://github.com/eggborne/toad-game',
@@ -238,15 +265,13 @@ export const projects = [
 	},
 	
 	{
-		'id': 10,
+		'id': 11,
 		'name': 'Donald Trump\'s Punch-Out',
 		'url': 'https://eggborne.com/punchout',
 		'repo': 'https://github.com/eggborne/donald-trump-punch-out',
 		'description': 'Mike Tyson\'s Punch-Out except you beat up the President',
 		'technologies': [
-			'React',
-			'PHP',
-			'MySQL'
+			'PixiJS'
 		],
 		'descriptionBullets': [
 			'Makes you feel better temporarily',
@@ -257,10 +282,10 @@ export const projects = [
 			desktop: 2,
 			tablet: 2,
 		},
-		iconUrl: 'https://eggborne.com/icons/boxinggloveicon.png'
+		iconUrl: 'https://eggborne.com/icons/dtpoicon.png'
 	},
 	{
-		'id': 11,
+		'id': 12,
 		'name': 'Egg Protector',
 		'url': 'https://eggborne.com/eggprotector',
 		'repo': 'https://github.com/eggborne/egg-protector',
@@ -282,7 +307,7 @@ export const projects = [
 		iconUrl: 'https://eggborne.com/icons/fetusicon.jpg'
 	},
 	{
-		'id': 12,
+		'id': 13,
 		'name': 'This very website',
 		'url': 'https://mikedonovan.dev',
 		'repo': 'https://github.com/eggborne/vue-portfolio',
@@ -297,9 +322,9 @@ export const projects = [
 		],
 		'directory':'mikedonovandev',
 		'screenshots': {
-			portrait: 1,
-			desktop: 1,
-			tablet: 1,
+			portrait: 2,
+			desktop: 0,
+			tablet: 0,
 		},
 		iconUrl: 'https://eggborne.com/icons/chickenicon.png'
 	},

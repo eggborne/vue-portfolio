@@ -108,6 +108,10 @@ import Icon from './Icon.vue';
 import TechTag from './TechTag.vue';
 import Screenshot from './Screenshot.vue';
 
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 export default {
 	data: () => {
 		return {
@@ -160,14 +164,17 @@ export default {
 				}		
 				
 			}
-			console.log(this.project.name, 'made screenshots', screenshots)			
-			this.reportScreenUrls(this.project.id, screenshots)
-		}		
+			console.log(this.project.name, 'made screenshots', screenshots);
+			this.reportScreenUrls(this.project.id, screenshots);
+		}
 	},
 	mounted() {
 		if (!window.CARD_HEIGHT) {
 			window.CARD_HEIGHT = this.$el.offsetHeight;
 		}
+		Object.keys({...this.screenIndexes}).forEach((deviceType, i) => {
+			this.screenIndexes[deviceType] = randomInt(0, this.project.screenshots[deviceType].length - 1);
+		});
 		for (let timerType in this.screenTimers) {
 			if (this.project.screenshots[timerType].length > 1) {
 				let delay = Object.keys(this.screenTimers).indexOf(timerType) * 1000;
@@ -176,6 +183,7 @@ export default {
 				}, 2000 + delay)
 			}
 		}
+		
 		
 		// let options = {
 		// 	root: document.querySelector('#app'),
@@ -268,8 +276,8 @@ export default {
 		calc(var(--header-height) * 1.2)
 		calc(var(--header-height) / 1.25) 
 		1fr
-		/* var(--screenshot-area-height) */
-		calc(var(--header-height) / 1.25) 
+		1fr
+		/* calc(var(--header-height) / 1.25)  */
 		calc(var(--header-height) * 1.2)
 	;
 	justify-items: stretch;
@@ -452,6 +460,7 @@ a {
 	padding-top: calc(var(--arc-radius) / 8);
 }
 .bullet-area {
+	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	flex-flow: row wrap;
@@ -508,7 +517,7 @@ a {
 .screenshot-area {
 	position: relative;
 	width: var(--screenshot-area-width);
-	height: min-content;
+	/* height: min-content; */
 	max-width: 100vw;
 	display: flex;
 	justify-content: space-between;
