@@ -55,7 +55,7 @@ function setScreenDimensions() {
   window.ARC_RADIUS = 50;
   window.HIGHLIGHT_WIDTH = Math.ceil(window.MAIN_PADDING / 12);
   window.CARD_SPACING = window.MAIN_PADDING * 1;
-  // document.documentElement.style.setProperty('--view-height', window.innerHeight + 'px');
+  document.documentElement.style.setProperty('--view-height', window.innerHeight + 'px');
   // document.documentElement.style.setProperty('--header-height', window.HEADER_HEIGHT + 'px');
   // document.documentElement.style.setProperty('--footer-height', window.FOOTER_HEIGHT + 'px');
   // document.documentElement.style.setProperty('--main-padding', window.MAIN_PADDING + 'px');
