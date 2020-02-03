@@ -127,8 +127,8 @@ export default class SwipeDetector {
     this.swipedThisTouch = false;
   }
   setInputs(el) {
-    el.addEventListener('touchstart', this.touchStart.bind(this), true);
-    el.addEventListener('touchmove', this.touchMove.bind(this), true);
+    el.addEventListener('touchstart', this.touchStart.bind(this), { passive: true });
+    el.addEventListener('touchmove', this.touchMove.bind(this), { passive: true });
     el.addEventListener('touchend', this.touchEnd.bind(this), true);
     // this.bound = true;
   }

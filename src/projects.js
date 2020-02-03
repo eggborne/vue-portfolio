@@ -1,24 +1,23 @@
 export const techTagColors = {
-	React: 'rgb(150, 130, 100)',
-	Vue: 'rgb(66, 151, 23)',
-	VueX: 'rgb(80, 100, 0)',
-	PixiJS: 'rgb(88, 88, 207)',
-	MySQL: 'rgb(32, 73, 8)',
-	PHP: 'rgb(61, 9, 9)',
-	Webpack: 'rgb(100, 100, 255)',
-	NPM: 'rgb(12, 24, 67)'
+	'React': 'rgb(150, 130, 100)',
+	'Vue': 'rgb(66, 151, 23)',
+	'VueX': 'rgb(80, 100, 0)',
+	'PixiJS': 'rgb(88, 88, 207)',
+	'MySQL': 'rgb(32, 73, 8)',
+	'PHP': 'rgb(61, 9, 9)',	
+	'Brain.js': 'rgb(200, 150, 100)',
+	'Webpack': 'rgb(100, 100, 255)',
+	'NPM': 'rgb(12, 24, 67)'
 }
 export const projects = [
 	{
 		'id': 0,
 		'name': 'Wagsworth Grooming',
-		'url': 'https://eggborne.com/wag',
+		'url': 'https://wagsworthgrooming.com',
 		'repo': 'https://github.com/eggborne/wagsworth',
 		'description': 'Website for Wagsworth Grooming in Lake Oswego, Oregon',
 		'technologies': [
 			'React',
-			'NPM',
-			'Webpack'
 		],
 		'descriptionBullets': [
 			'Website for Wagsworth Grooming',
@@ -42,8 +41,6 @@ export const projects = [
 			'React',
 			'PHP',
 			'MySQL',
-			'NPM',
-			'Webpack'
 		],
 		'descriptionBullets': [
 			'Secure login/registration system',
@@ -58,6 +55,30 @@ export const projects = [
 		iconUrl: 'https://chicken.bingo/android-chrome-192x192.png'
 	},
 	{
+		'id': 252,
+		'name': 'AI Shape Detector',
+		'url': 'https://eggborne.com/diagrammer',
+		'repo': 'https://github.com/eggborne/shape-detector',
+		'description': 'Identifies user-drawn shapes using machine learning',
+		'technologies': [
+			'Vue',
+			'PixiJS',
+			'Brain.js',
+			'PHP',
+			'MySQL',
+		],
+		'descriptionBullets': [
+			'Includes interface for training custom models',
+		],
+		'directory':'shapedetector',
+		'screenshots': {
+			portrait:2,
+			desktop: 2,
+			tablet: 0,
+		},
+		iconUrl: 'https://eggborne.com/diagrammer/img/icons/favicon-32x32.png'
+	},
+	{
 		'id': 2,
 		'name': 'Pazaak Online',
 		'url': 'https://pazaak.online',
@@ -67,8 +88,6 @@ export const projects = [
 			'React',
 			'PHP',
 			'MySQL',
-			'NPM',
-			'Webpack'
 		],
 		'descriptionBullets': [
 			'Secure login/registration system',
@@ -86,15 +105,13 @@ export const projects = [
 		'id': 3,
 		'name': 'Crossword Creator',
 		'url': 'https://crosswords.cc',
-		'repo': 'https://github.com/eggborne/crossword-generator',
+		'repo': 'https://github.com/eggborne/crossword-vue',
 		'description': 'Full-featured crossword puzzle creator',
 		'technologies': [
 			'Vue',
-			'VueX',
 			'PHP',
 			'MySQL',
-			'NPM',
-			'Webpack'
+			'Brain.js',
 		],
 		'descriptionBullets': [
 			'Generates puzzle diagrams according to defined constraints',
@@ -111,15 +128,13 @@ export const projects = [
 	{
 		'id': 4,
 		'name': 'Name Generator',
-		'url': 'https://www.eggborne.com/namegenerator',
+		'url': 'https://eggborne.com/namegenerator',
 		'repo': 'https://github.com/eggborne/customizable-name-generator',
 		'description': 'Generates random names according to user-specified rules',
 		'technologies': [
 			'React',
 			'PHP',
-			'MySQL',
-			'NPM',
-			'Webpack'
+			'MySQL',			
 		],
 		'descriptionBullets': [
 			'Syllable-based word construction',
@@ -142,9 +157,7 @@ export const projects = [
 		'technologies': [
 			'PixiJS',
 			'PHP',
-			'MySQL',
-			'NPM',
-			'Webpack'
+			'MySQL',			
 		],
 		'descriptionBullets': [
 			'Gamepad support',
@@ -170,6 +183,7 @@ export const projects = [
 			'MySQL'
 		],
 		'descriptionBullets': [
+			'Gamepad support',
 			'Online leaderboard',
 		],
 		'directory':'tetro',
@@ -213,7 +227,7 @@ export const projects = [
 			'PixiJS'
 		],
 		'descriptionBullets': [
-			'Uses the structure of the original map, but randomizes the contents',
+			'',
 		],
 		'directory':'metroid',
 		'screenshots': {
@@ -253,7 +267,7 @@ export const projects = [
 			'PixiJS'
 		],
 		'descriptionBullets': [
-			'A narrative platforming adventure starring Super Mario\'s Toad'
+			''
 		],
 		'directory':'toadgame',
 		'screenshots': {
@@ -289,14 +303,14 @@ export const projects = [
 		'name': 'Egg Protector',
 		'url': 'https://eggborne.com/eggprotector',
 		'repo': 'https://github.com/eggborne/egg-protector',
-		'description': 'A fast-paced Missile Command/tower defense mashup',
+		'description': 'A fast-paced Missile Command/tower defense game',
 		'technologies': [
-			'React',
+			'PixiJS',
 			'PHP',
 			'MySQL'
 		],
 		'descriptionBullets': [
-			'A fast-paced Missile Command/tower defense mashup'
+			''
 		],
 		'directory':'eggprotector',
 		'screenshots': {
@@ -311,14 +325,13 @@ export const projects = [
 		'name': 'This very website',
 		'url': 'https://mikedonovan.dev',
 		'repo': 'https://github.com/eggborne/vue-portfolio',
-		'description': 'This selfsame website which you are currently visiting',
+		'description': 'The selfsame website which you are currently visiting',
 		'technologies': [
 			'Vue',
-			'NPM',
-			'Webpack'
+			
 		],
 		'descriptionBullets': [
-			'This selfsame website which you are currently visiting',
+			'',
 		],
 		'directory':'mikedonovandev',
 		'screenshots': {
@@ -330,8 +343,8 @@ export const projects = [
 	},
 ];
 
-export const optionData = [
-	{
+export const userOptionData = {
+	noScroll: {
 		id: 0,
 		inputType: 'toggle',
 		defaultValue: true,
@@ -339,23 +352,15 @@ export const optionData = [
 		title: 'Traditional scrolling',
 		cssVar: ''
 	},
-	// {
-	// 	id: 1,
-	// 	inputType: 'toggle',
-	// 	defaultValue: true,
-	// 	name: 'wavyMode',
-	// 	title: 'Waviness',
-	// 	cssVar: ''
-	// },
-	{
+	darkMode: {
 		id: 2,
 		inputType: 'toggle',
-		defaultValue: true,
+		defaultValue: false,
 		name: 'darkMode',
 		title: 'Space Mode',
 		cssVar: ''
 	},
-	{
+	animations: {
 		id: 3,
 		inputType: 'toggle',
 		defaultValue: true,
@@ -363,7 +368,7 @@ export const optionData = [
 		title: 'Animations',
 		cssVar: '--animations'
 	},
-	{
+	waveRadius: {
 		id: 1,
 		inputType: 'range',
 		step: 1,
@@ -375,7 +380,7 @@ export const optionData = [
 		title: 'Waviness',
 		cssVar: '--arc-radius'
 	},
-	{
+	borderSize: {
 		id: 4,
 		inputType: 'range',
 		step: 1,
@@ -387,19 +392,31 @@ export const optionData = [
 		title: 'Border size',
 		cssVar: '--highlight-width'
 	},
-	{
+	footerHeight: {
 		id: 44,
 		inputType: 'range',
-		step: 1,
+		step: 0,
 		minValue: 0,
-		maxValue: 10,
+		maxValue: 6,
 		unitSuffix: '',
-		defaultValue: 4,
+		defaultValue: 2,
 		name: 'footerHeight',
 		title: 'Footer size',
 		cssVar: '--footer-height'
 	},
-	{
+	// screenshotCycleDuration: {
+	// 	id: 55,
+	// 	inputType: 'range',
+	// 	step: 500,
+	// 	minValue: 1000,
+	// 	maxValue: 8000,
+	// 	unitSuffix: ' sec.',
+	// 	defaultValue: 4000,
+	// 	name: 'screenshotCycleDuration',
+	// 	title: 'Screenshot cycle time',
+	// 	cssVar: ''
+	// },
+	headerColor: {
 		id: 5,
 		inputType: 'color',
 		defaultValue: '#2d382a',
@@ -407,7 +424,7 @@ export const optionData = [
 		title: 'Header / Menu',
 		cssVar: '--header-color'
 	},
-	{
+	cardBgColor: {
 		id: 6,
 		inputType: 'color',
 		defaultValue: '#33323b',
@@ -415,7 +432,7 @@ export const optionData = [
 		title: 'Card background',
 		cssVar: '--card-bg-color'
 	},
-	{
+	mainBgColor: {
 		id: 7,
 		inputType: 'color',
 		defaultValue: '#080808',
@@ -423,7 +440,7 @@ export const optionData = [
 		title: 'Main background',
 		cssVar: '--main-bg-color'
 	},
-	{
+	cardHeaderColor: {
 		id: 8,
 		inputType: 'color',
 		defaultValue: '#252f33',
@@ -431,7 +448,7 @@ export const optionData = [
 		title: 'Card header',
 		cssVar: '--card-header-color'
 	},
-	{
+	highlightColor: {
 		id: 9,
 		inputType: 'color',
 		defaultValue: '#4e5c40',
@@ -439,7 +456,7 @@ export const optionData = [
 		title: 'Border',
 		cssVar: '--highlight-color'
 	},
-	{
+	textColor: {
 		id: 10,
 		inputType: 'color',
 		defaultValue: '#d8d8d8',
@@ -447,6 +464,6 @@ export const optionData = [
 		title: 'Text',
 		cssVar: '--main-text-color'
 	},
-];
+};
 
 console.info(projects)

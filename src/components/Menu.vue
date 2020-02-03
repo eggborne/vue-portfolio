@@ -10,8 +10,16 @@
 			</div>
 		</div>
 		<!-- PROJECTS -->
-		<span v-if='mode === `projectsMode`'>
-			<div class='menu-header-area'>
+
+		<transition-group name='slide-menu'>
+			<div :key='`settings-header`' v-if='mode === `settingsMode`' id='options-header' class='menu-header-area'>
+				<Touchable class='list-button clickable activated'
+					:pointerDownAction='() => null'
+				>
+					<span>Site settings</span>
+				</Touchable>
+			</div>
+			<div :key='`projects-header`' v-else-if='mode === `projectsMode`' class='menu-header-area'>
 				<Touchable class='list-button clickable'
 					:class='listMode === `icons` && `activated`'
 					:pointerDownAction='changeListMode'>
@@ -25,6 +33,59 @@
 					<i class="material-icons"> list </i>
 				</Touchable>
 			</div>
+		</transition-group>
+		
+
+		<transition-group name='fade-menu'>							
+		<!-- SETTINGS -->
+
+		<div class='menu-section' :key='`settings`' v-if='mode === `settingsMode`'>
+			<div id='option-list'>
+				<Toggle 
+					v-for='option in toggledOptions'
+					:key='option.inputType + option.id'					
+					:option='option'
+					:on='userOptions[option.name]'
+					:toggleOption='() => $store.commit(`userOptions/toggleOption`, option.name)'
+				/>
+				<Slider 
+					v-for='option in rangedOptions'
+					:key='option.inputType + option.id'
+					:class='[option.inputType]'
+					:option='option'
+					:rangeValue='parseInt(userOptions[option.name])'
+				>
+				</Slider>
+				<div class='settings-section' id='color-area'>
+					<ColorPicker
+						v-for='option in colorOptions'
+						:key='option.inputType + option.id'
+						:class='[option.inputType]'
+						:option='option'
+						:colorValue='userOptions[option.name]'
+					/>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- </transition>
+		<transition name='fade'>							 -->
+		<div class='menu-section' :key='`projects`' v-else-if='mode === `projectsMode`'>
+			<!-- <div class='menu-header-area'>
+				<Touchable class='list-button clickable'
+					:class='listMode === `icons` && `activated`'
+					:pointerDownAction='changeListMode'>
+					<span>Icons</span>
+					<i class="material-icons"> view_comfy </i>
+				</Touchable>
+				<Touchable class='list-button clickable'
+					:class='listMode === `list` && `activated`'
+					:pointerDownAction='changeListMode'>
+					<span>List</span>
+					<i class="material-icons"> list </i>
+				</Touchable>
+			</div> -->
 
 			<div :class='listMode' id="project-listings">
 				<div
@@ -33,58 +94,12 @@
 					class="project-listing clickable"			
 					@click="() => switchToProject(i)"
 				>
-					<!-- <img :src="`/icons2/${proj.directory}.png`" /> -->
 					<Icon :project='proj' :size='listMode == `icons` ? (headerHeight / 1.5) : (headerHeight / 2)' :listIndex='sortedProjectList.indexOf(proj)' />
 					<div>{{ proj.name }}</div>
 				</div>
 			</div>
-
-		</span>
-
-
-		<!-- SETTINGS -->
-
-		<span v-else-if='mode === `settingsMode`'>
-
-			<div id='options-header' class='menu-header-area'>
-				<Touchable class='list-button clickable activated'
-					:pointerDownAction='() => null'
-				>
-					<span>Site settings</span>
-				</Touchable>
-			</div>
-			
-			<div id='option-list'>
-				<Toggle 
-					v-for='option in toggledOptions'
-					:key='option.inputType + option.id'					
-					:option='option'
-					:on='options[option.name]'
-					:toggleOption='() => toggleOption(option.name)'
-				/>
-				<Slider 
-					v-for='option in rangedOptions'
-					:key='option.inputType + option.id'
-					:class='[option.inputType]'
-					:option='option'
-					:adjustRangedOption='adjustRangedOption'
-					:rangeValue='parseInt(options[option.name])'
-				>
-				</Slider>
-				<!-- <div id='color-area'>
-					<ColorPicker
-						v-for='option in colorOptions'
-						:key='option.inputType + option.id'
-						:class='[option.inputType]'
-						:option='option'
-						:setOption='setOption'
-						:colorValue='options[option.name]'
-					/>
-				</div> -->
-			</div>
-
-		</span>
-
+		</div>
+		</transition-group>
 		<div class='corner-arc northeast lower wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
@@ -92,30 +107,27 @@
 	</div>
 </template>
 <script>
-import { optionData } from '../projects.js';
+import { userOptionData, projects } from '../projects.js';
 import Touchable from './Touchable.vue';
 import Icon from './Icon.vue';
 import Toggle from './Toggle.vue';
 import Slider from './Slider.vue';
 import ColorPicker from './ColorPicker.vue';
+import { mapState } from 'vuex';
 
 export default {
 	name: 'Menu',
 	data: () => {
 		return {
 			listMode: 'icons',
-			headerHeight: window.HEADER_HEIGHT		
+			headerHeight: window.HEADER_HEIGHT
 		}
 	},
 	props: {
 		mode: String,
-		projects: Array,
-		options: Object,
-		toggleMenu: Function,
+		toggleMenuOn: Function,
 		switchProjects: Function,
 		toggleOption: Function,
-		setOption: Function,
-		adjustRangedOption: Function
 	},
 	components: {
 		Touchable,
@@ -124,40 +136,44 @@ export default {
 		Slider,
 		ColorPicker
 	},
-	computed: {
-		optionData() {
-			return optionData;
+	computed: {		
+		
+		sortedProjectList: function() {
+			console.log('Menu this.proj', this.projects)
+			return Object.values(this.projects);
+			// return [...this.projects].sort((a, b) => {
+				// 	if (b.directory > a.directory) {
+					// 		return -1
+			// 	} else {
+			// 		return 1;
+			// 	}
+			// })
+		},
+		...mapState({projects: 'projects'}),
+		...mapState('userOptions', {
+			userOptions: state => state,
+		}),
+		optionList() {
+			return Object.values(userOptionData);
 		},
 		toggledOptions() {
-			return optionData.filter(option => option.inputType === 'toggle');
+			return this.optionList.filter(option => option.inputType === 'toggle');
 		},
 		rangedOptions() {
-			return optionData.filter(option => option.inputType === 'range');
-			// return [];
+			return this.optionList.filter(option => option.inputType === 'range');
 		},
 		colorOptions() {
-			return optionData.filter(option => option.inputType === 'color');
-		},
-		sortedProjectList: function() {
-			return [...this.projects].sort((a, b) => {
-				if (b.directory > a.directory) {
-					return -1
-				} else {
-					return 1;
-				}
-			})
+			return this.optionList.filter(option => option.inputType === 'color');
 		}
 	},
 	methods: {
 		changeListMode(e) {
-			console.log('inner is', e.target.innerText)
 			let newMode = e.target.innerText.indexOf('Icons') > -1 ? 'icons' : 'list';
-			console.log('changing to', newMode);
 			this.listMode = newMode;
-		},
+		},		
 		switchToProject(ind) {
 			this.switchProjects(ind);
-			requestAnimationFrame(() => this.toggleMenu());
+			requestAnimationFrame(() => this.toggleMenuOn());
 		},
 		goToProject: function(e) {
 			let projectIndex = [...e.target.parentElement.children].indexOf(e.target);			
@@ -173,7 +189,7 @@ export default {
 			// 	top: -(window.HEADER_HEIGHT + window.MAIN_PADDING)
 			// 	//  behavior: 'smooth'
 			// });
-			this.toggleMenu();
+			this.toggleMenuOn();
 		}
 	}
 };
@@ -183,10 +199,10 @@ export default {
 #menu {
 	--badge-size: calc(var(--header-height) * 1.35);
 	--list-row-height: calc(var(--header-height) / 1.5);
-	--max-row-height: calc((var(--view-height) - var(--header-height) - (var(--header-height) / 1.75) - var(--footer-height) - (var(--main-padding) * 3) - var(--badge-size) - (var(--highlight-width) * 2)) / 13);
+	--max-row-height: calc((var(--view-height) - var(--header-height) - (var(--header-height) / 1.75) - var(--footer-height) - (var(--main-padding) * 3) - var(--badge-size) - (var(--highlight-width) * 2)) / 15);
 	position: absolute;
-	width: calc((var(--badge-size) * 3) + (var(--main-padding) * 2) + (var(--inner-padding) * 2));
 	width: calc((var(--badge-size) * 3) + (var(--main-padding) * 4));
+	height: calc(var(--view-height) - var(--header-height) - var(--footer-height));
 	top: var(--header-height);
 	right: 0;
 	color: var(--main-text-color);
@@ -196,6 +212,12 @@ export default {
 	border-bottom-left-radius: var(--arc-radius);
 	background: var(--header-color);
 }
+.menu-section {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	transform-origin: top;	
+}
 .northeast.upper > .corner-arc-box {
 	top: 0;
 	left: calc(var(--arc-radius) * -1);
@@ -203,15 +225,13 @@ export default {
 .northeast.lower > .corner-arc-box {
 	bottom: calc(var(--arc-radius) * -1);
 	right: calc(var(--highlight-width) * -1);
-	/* right: 0; */
 }
 #menu:not(.activated) {
 	transform: translateX(calc(100% + var(--highlight-width)));
 }
 .menu-header-area {
-	padding: 0 calc(var(--main-padding) * 1.5);
 	width: 100%;
-	height: calc(var(--header-height) / 1.75);
+	height: calc(var(--header-height) / 1.5);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -219,15 +239,16 @@ export default {
 .menu-header-area > button > * {
 	pointer-events: none;
 }
-#options-header {
+#options-header, #colors-header {
 	flex-direction: column;
 	align-items: stretch;
 	/* display: none; */
 }
-#options-header > button {
+#options-header > button, #colors-header > button {
 	margin: 0;
 }
 #option-list {
+	align-self: stretch;
 	display: grid;
 	grid-row-gap: var(--main-padding);
 	padding: calc(var(--main-padding) * 1.5);
@@ -237,13 +258,37 @@ export default {
 	justify-content: space-between;
 	min-height: calc(var(--header-height) - (var(--main-padding) * 1.25));
 }
+#option-list .menu-slider {
+	min-height: calc(var(--header-height) / 1.2);
+	max-height: calc(var(--header-height) / 1.2);
+}
+.settings-section {
+	border: 1px solid #ffffff66;
+	border-radius: var(--inner-padding);
+  grid-row-start: 8;
+}
+.settings-section::after {
+	position: absolute;
+	height: 1rem;
+	padding: var(--inner-padding);
+	font-size: 0.75rem;
+	top: 0;
+	left: 0;
+	transform: translate(var(--inner-padding), -50%);
+	background-color: var(--header-color);
+}
 #color-area {
+	height: 100%;
+	position: relative;
 	display: grid;
-	grid-template-columns: 0.5fr 0.5fr;
-	grid-template-rows: auto;
-	justify-items: stretch;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	/* justify-items: stretch; */
 	padding: var(--main-padding);
 	grid-column-gap: calc(var(--inner-padding) / 1.5);
+}
+#color-area::after {
+	content: 'Colors';
 }
 .list-button {
 	border: 1px solid;
@@ -278,20 +323,21 @@ export default {
 	opacity: 1;
 }
 #project-listings {
-	width: 100%;
+	width: auto;
 	font-weight: 700;
 	display: grid;	
 	justify-content: center;	
-	padding: calc(var(--main-padding) * 1.5);
-	overflow: hidden;
+	/* overflow: hidden; */
+	/* padding: calc(var(--header-height) / 1.5); */
 }
 #project-listings > .project-listing {
 	border-radius: calc(var(--inner-padding) / 1.5);
 }
 #project-listings.icons {
 	grid-template-columns: repeat(3, var(--badge-size));
-	grid-row-gap: calc(var(--badge-size) / 12);
+	grid-row-gap: calc(var(--badge-size) / 9);
 	grid-column-gap: calc(var(--badge-size) / 12);
+	padding: calc(var(--main-padding) * 2) 0;
 }
 #project-listings.list {
 	grid-template-columns: 1fr;
@@ -302,7 +348,7 @@ export default {
 	display: grid;
 	align-items: center;
 	justify-items: center;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: auto auto;
 	text-align: center;	
 	width: var(--badge-size);
 	height: var(--badge-size);
@@ -341,26 +387,38 @@ export default {
 	/* background-color: var(--sheer-white); */
 	border-radius: calc(var(--inner-padding) / 2);
 	background-image: linear-gradient(to left, var(--sheer-white) 60%, transparent 100%);
+	margin-left: var(--main-padding);
 	padding-right: var(--main-padding);
 }
-@media screen and (orientation: landscape) {
+@media screen and (orientation: landscape) and (min-width: 768px) {
 	#menu {
-		--max-row-height: unset;
-		width: calc((var(--badge-size) * 4) + (var(--main-padding) * 4) + var(--inner-padding) * 3);
-		padding-top: var(--header-height);
-		top: 0;
-		height: unset;
-		border-bottom-right-radius: calc(var(--inner-padding));
+		--max-row-height: unset;		
+		min-width: calc((var(--badge-size) * 5) + (var(--main-padding) * 4) + var(--inner-padding) * 3);
+		top: var(--header-height);
+		/* height: calc(var(--view-height) - var(--header-height)); */
+		
+	}
+	#project-listings {
+		width: auto;
+		padding: calc(var(--header-height));
+	}
+	#project-listings.list {
+		padding: calc(var(--header-height));
+	}
+	#project-listings.list > .project-listing {
+		width: max-content;
 	}
 	#menu:not(.activated) {
-		transform: translateY(-100%);
+		/* transform: translateY(-100%); */
 	}
 	#project-listings.icons {
 		grid-template-columns: repeat(4, var(--badge-size));
 	}
 	#project-listings.list {
 		grid-template-columns: 0.5fr 0.5fr;
-		grid-column-gap: var(--main-padding);
+		/* grid-column-gap: var(--main-padding); */
+	 width: min-content;
+	 align-items: center;
 	}
 }
 </style>

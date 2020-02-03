@@ -1,10 +1,16 @@
 <template>
-<header id='page-header'>  
-  <div id='menu-button-area' :class='[menuOn && `showing`, menuMode === `projectsMode` ? `projects-mode` : `settings-mode`]'>
-    <Touchable id='settings-button' class='menu-button clickable' :pointerDownAction='() => menuMode = `settingsMode`'>
+<header id='page-header'>
+  <div v-if='landscape' class='corner-arc northwest lower wavy-corner'>
+    <div class='corner-arc-box'>
+    </div>
+  </div>
+  <div id='menu-button-area' :class='[(landscape || menuOn) && `showing`, menuMode === `projectsMode` ? `projects-mode` : `settings-mode`, menuOn && `menu-on`]'>
+    <Touchable id='settings-button' class='menu-button clickable' :pointerDownAction='() => handleSubMenuClick(`settingsMode`)'>
+      <div v-if='landscape'>SITE SETTINGS</div>
       <i class="material-icons"> settings </i>
     </Touchable>
-    <Touchable id='projects-button' class='menu-button clickable' :pointerDownAction='() => menuMode = `projectsMode`'>
+    <Touchable id='projects-button' class='menu-button clickable' :pointerDownAction='() => handleSubMenuClick(`projectsMode`)'>
+      <div v-if='landscape'>FULL LIST</div>
       <i class="material-icons"> computer </i>
     </Touchable>
   </div>
@@ -20,20 +26,17 @@
     {{ letter === ' ' ? `&nbsp;` : letter }}
     </span>
   </h1>
-  <Touchable id='hamburger-button' :pointerDownAction='toggleMenu'>
+  <Touchable v-if='!landscape' id='hamburger-button' :pointerDownAction='toggleMenuOn'>
     <Hamburger :menuOn='menuOn' />
   </Touchable>
   <transition name='slide'>	
-    <Menu 
+    <Menu      
       :mode='menuMode'
-      :toggleMenu='toggleMenu' 
-      :projects='projects'
       :switchProjects='switchProjects'
       :class='menuOn && `activated`'
-      :options='options'
       :toggleOption='toggleOption'
+      :toggleMenuOn='toggleMenuOn'
       :setOption='setOption'
-      :adjustRangedOption='adjustRangedOption'
     />
   </transition>
 </header>
@@ -43,6 +46,7 @@
 import Hamburger from './Hamburger.vue';
 import Menu from './Menu.vue';
 import Touchable from './Touchable.vue';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'Header',
@@ -52,15 +56,13 @@ export default {
     menuMode: 'projectsMode'
   }},
   props: {
+    landscape: Boolean,
     titleText: String,
-    toggleMenu: Function,
+    // toggleMenu: Function,
     menuOn: Boolean,
-    projects: Array,
     switchProjects: Function,
-    options: Object,
     toggleOption: Function,
     setOption: Function,
-    adjustRangedOption: Function
   },
   mounted() {
     this.titleArray = this.titleText.split('');
@@ -68,6 +70,9 @@ export default {
     this.revealLetters();
   },
   methods: {
+    ...mapMutations([
+			'toggleMenuOn'
+		]),
     revealLetters() {
       if (this.lettersRevealed < this.titleArray.length) {
         this.lettersRevealed++;
@@ -75,6 +80,12 @@ export default {
           this.revealLetters();
         }, 50)
       }
+    },
+    handleSubMenuClick(newMode) {
+      window.IS_LANDSCAPE && 
+      (!this.menuOn || this.menuMode === newMode) && 
+      this.toggleMenuOn();      
+      this.menuMode = newMode;
     }
   },
 	components: {
@@ -88,7 +99,6 @@ export default {
 <style scoped>
 #page-header {
   font-size: var(--title-font-size);
-  /* width: calc(100vw - var(--header-height)); */
   width: 100vw;
   position: absolute;
   top: 0;
@@ -102,7 +112,7 @@ export default {
 h1 {
   font-weight: normal 
 }
-#app.wavy #page-header {
+#page-header {
   border-bottom-left-radius: var(--arc-radius);
 }
 #title-text {
@@ -169,7 +179,7 @@ h1 {
 	border: calc(var(--inner-padding) / 2) solid transparent;
 	opacity: 0;
 	transition-delay: 0ms;
-  border-radius: 10%;
+  border-radius: calc(var(--header-height) / 6);
   transform: translateY(-10%);
 	transition: opacity 320ms ease, transform 320ms ease;
 }
@@ -193,18 +203,48 @@ h1 {
 .projects-mode #projects-button, .settings-mode #settings-button {
 	border-color: var(--off-white);
 }
-@media screen and (orientation: landscape) {
+
+@media screen and (orientation: landscape) and (min-width: 768px) {
   #page-header {
-    /* width: var(--main-column-width); */
-    width: 100vw;
-    padding-left: 6vw;
-    padding-right: calc(var(--hamburger-size) * 1.5);
+    text-align: left;
+    width: var(--body-width);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0 !important;
+    border-left: 0;
+  }
+  #menu-button-area {
+    margin-right: calc(var(--header-height) / 8);
+  }
+  .northwest.lower > .corner-arc-box::after {
+    box-shadow: calc(var(--arc-radius) / -3) calc(var(--arc-radius) / -3) 0px var(--header-color);
+    border: var(--highlight-width) solid var(--highlight-color);
+  }
+  .northwest.lower > .corner-arc-box {
+    bottom: calc(var(--arc-radius) * -1);
+    /* left: calc(var(--highlight-width) * -2); */
+    left: -2px;
+  }
+  .menu-button {
+    width: auto;
+    padding: 0 calc(var(--header-height) / 8);
+    margin-left: calc(var(--header-height) / 12);
+    display: flex;
+    font-size: calc(var(--header-height) / 5);
+    border-color: #b9b9b999 !important;
+  }
+  .projects-mode.menu-on #projects-button, .settings-mode.menu-on #settings-button {
+    border-color: #afa !important;
+    color: #afa !important;
+  }
+  .menu-button > div {
+    min-width: max-content;
+    padding-right: calc(var(--header-height) / 16);
   }
   #page-header::before, #lower-right-piece {
-    display: none;
+    /* display: none; */
   }
   #title-text {
-    margin: 0;
+    flex-grow: 1;
   }
 }
 

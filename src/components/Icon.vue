@@ -14,7 +14,6 @@ export default {
 	name: 'Icon',
 	props: {
 		project: Object,
-		listIndex: Number
 	},
 	computed: {
 		size: function() {

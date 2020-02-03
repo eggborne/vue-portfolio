@@ -1,5 +1,5 @@
 <template>
-  <div id='hamburger' :class='menuOn && `activated`'>
+  <div id='hamburger' :class='$store.state.menuOn && `activated`'>
     <div class='hamburger-bar'></div>
     <div class='hamburger-bar'></div>
     <div class='hamburger-bar'></div>
@@ -10,7 +10,6 @@
 export default {
 	name: 'Hamburger',
 	props: {
-		menuOn: Boolean
 	}
 }
 </script>

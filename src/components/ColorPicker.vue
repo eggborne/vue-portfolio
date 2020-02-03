@@ -1,16 +1,17 @@
 <template>
-<div>
+<div :class='$store.state.userOptions.darkMode && (option.name === `mainBgColor` || option.name === `cardBgColor`) ? `disabled-input` : ``'>
 	<div class='label'>{{ option.title }}</div>
 	<input 
-		v-on:change='() => setOption(option.name, currentValue)' 
-		v-model='currentValue'
-		:label='option.name' 
 		type='color'
+		v-on:change='(e) => setColor(e, option.name)'
+		:value='colorValue'
+		:label='option.name'		
 	/>
 </div>
 </template>
 
 <script>
+import { userOptionData } from '../projects.js';
 export default {
 	name: 'ColorPicker',
 	data: () => ({ 
@@ -18,14 +19,24 @@ export default {
 	}),
 	props: {
 		option: Object,
-		setOption: Function,
 		colorValue: String
 	},
-	created() {
-		},
 	mounted() {
 		console.log(this.option.name, 'color picker mounted with colorval', this.colorValue)
-		this.currentValue = this.colorValue || this.option.defaultValue;
+	},
+	methods: {
+		setColor(e, colorType) {
+			console.log('setColor arg', e);
+			let newColor = e.target.value
+			console.log('e', e)
+			// let cssVar = userOptionData[colorType].cssVar;
+			// console.log('setting', cssVar, 'to', newColor)
+			// document.documentElement.style.setProperty(cssVar, newColor);
+			this.$store.commit('userOptions/setOption', {
+				optionName: colorType,
+				value: newColor
+			});
+		},
 	}
 };
 </script>
@@ -47,6 +58,10 @@ export default {
 	width: max-content;
 	color: rgb(255, 255, 255); 
 	mix-blend-mode: difference;
+	pointer-events: none;
+}
+.disabled-input {
+	opacity: 0.25;
 	pointer-events: none;
 }
 input[type="color" i] {

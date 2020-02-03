@@ -1,11 +1,12 @@
 <template>
 <div 				
-	class='project-card'				
+	class='project-card'
+	:class='landscape && `landscape`'				
 >
-	<a :name='`proj-${index}`' />
+	<a :name='`proj-${id}`' />
 	
 	<header class='project-header stroke'>
-		<div class='corner-arc southwest upper wavy-corner'>
+		<div v-if='!landscape' class='corner-arc southwest upper wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
 		</div>
@@ -15,7 +16,7 @@
 		</div>
 		<!-- <img :src='seen && `../assets/icons2/${project.directory}.png`' /> -->
 		<!-- <img :src='`/icons2/${project.directory}.png`' /> -->
-		<Icon :project='project' :size='headerHeight / 1.5' :listIndex='listIndex' />
+		<Icon :project='project' :size='headerHeight / 1.5' />
 		<h2 id='title-display'>
 			{{ project.name }}
 		</h2>
@@ -35,17 +36,14 @@
 			/>
 		</div>
 	</div>
-
-	<!-- <div class='screenshot-area'>
-		<Screenshot
-			v-for='(screenArray, deviceType) in project.screenshots'
-			:key='project.name + `screen` + deviceType'
-			:deviceType='deviceType'
-			:screenUrl='project.screenshots[deviceType][screenIndexes[deviceType]]'
-			:cycleScreen='cycleScreenshot'
-		>
-		</Screenshot>
-	</div> -->
+	<div v-if='landscape && projectIndex > 0' class='side-nav left' id='prev' @click='handleClickNav'>
+		<div class='arrow left'></div>
+		<div class='arrow-stalk left'></div>
+	</div>
+	<div v-if='landscape && projectIndex < 13' class='side-nav right' id='next' @click='handleClickNav'>
+		<div class='arrow-stalk right'></div>
+		<div class='arrow right'></div>
+	</div>
 	<div class='screenshot-area'>
 		<!-- <div @click='cycleDevice(-1)' class='nav-column left'>
 			<i class='material-icons'> arrow_forward_ios </i>
@@ -65,7 +63,7 @@
 		</div> -->
 	</div>
 
-	<div class='bullet-area'>
+	<div v-if='project.descriptionBullets[0]' class='bullet-area'>
 		<div
 			class='bullet-entry'
 			v-for='(bullet, i) in project.descriptionBullets'
@@ -74,6 +72,9 @@
 			<div class='bullet-knob'>👍</div>
 			<div class='bullet-text'>{{ bullet }}</div>
 		</div>
+	</div>
+	<div v-else class='bullet-area'>
+		
 	</div>
 	<footer class='card-footer'>
 		<div class='project-link clickable' @click='handleClickLink(`repo`)' >
@@ -94,7 +95,7 @@
 			<div class='corner-arc-box'>
 			</div>
 		</div>
-		<div class='corner-arc northeast lower wavy-corner'>
+		<div v-if='!landscape' class='corner-arc northeast lower wavy-corner'>
 			<div class='corner-arc-box'>
 			</div>
 		</div>
@@ -107,6 +108,7 @@ import { techTagColors } from '../projects.js';
 import Icon from './Icon.vue';
 import TechTag from './TechTag.vue';
 import Screenshot from './Screenshot.vue';
+import { mapState } from 'vuex';
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -131,20 +133,20 @@ export default {
 				desktop: null,
 			},
 			showingDevice: 1,
-			headerHeight: window.HEADER_HEIGHT
+			headerHeight: window.HEADER_HEIGHT,
+			landscape: window.IS_LANDSCAPE,
 		};
 	},
 	name: 'ProjectCard',
 	props: {
-		noScroll: Boolean,
 		msg: String,
 		project: Object,
-		index: Number,
-		menuOn: Boolean,
+		projectIndex: Number,
+		id: Number,
 		seen: Boolean,
 		selected: Boolean,
+		switchProjects: Function,
 		reportScreenUrls: Function,
-		listIndex: Number
 	},
 	components: {
 		Icon,
@@ -160,12 +162,13 @@ export default {
 				screenshots[screenType] = [];
 				for (let i = 0; i < screensOfType; i++) {
 					let url = `https://eggborne.com/screenshots/${this.project.directory}/${screenType}/${i}.${window.IMG_EXTENSION}`
+					console.warn('getting from', url)
 					screenshots[screenType][i] = url;
 				}		
 				
 			}
 			console.log(this.project.name, 'made screenshots', screenshots);
-			this.reportScreenUrls(this.project.id, screenshots);
+			this.reportScreenUrls(this.project.name, screenshots);
 		}
 	},
 	mounted() {
@@ -175,14 +178,7 @@ export default {
 		Object.keys({...this.screenIndexes}).forEach((deviceType, i) => {
 			this.screenIndexes[deviceType] = randomInt(0, this.project.screenshots[deviceType].length - 1);
 		});
-		for (let timerType in this.screenTimers) {
-			if (this.project.screenshots[timerType].length > 1) {
-				let delay = Object.keys(this.screenTimers).indexOf(timerType) * 1000;
-				this.screenTimers[timerType] = setTimeout(() => {
-					this.cycleScreenshot(timerType);
-				}, 2000 + delay)
-			}
-		}
+		this.startCycling();
 		
 		
 		// let options = {
@@ -223,17 +219,41 @@ export default {
 		// this.observer.observe(this.$el);		
 	},
 	beforeDestroy() {
-		for (let timer in this.screenTimers) {
-			if (this.screenTimers[timer] !== null) {
-				window.clearTimeout(this.screenTimers[timer]);
-				this.screenTimers[timer] = null;
-			}
-		}
+		this.stopCycling();
+	},
+	computed: {
+		...mapState(['menuOn']),
 	},
 	methods: {		
+		startCycling() {
+			for (let timerType in this.screenTimers) {
+				if (this.project.screenshots[timerType].length > 1) {
+					let delay = Object.keys(this.screenTimers).indexOf(timerType) * 500;
+					this.screenTimers[timerType] = setTimeout(() => {
+						
+						console.log('STARTING CYCLE!', this.project.name, this.$store.state.userOptions.screenshotCycleDuration)
+						this.cycleScreenshot(timerType);
+					}, this.$store.state.userOptions.screenshotCycleDuration + delay)
+				}
+			}
+		},
+		stopCycling() {
+			for (let timer in this.screenTimers) {
+				if (this.screenTimers[timer] !== null) {
+					window.clearTimeout(this.screenTimers[timer]);
+					this.screenTimers[timer] = null;
+				}
+			}
+		},
 		handleClickLink(linkType) {
 			// window.location.href = this.project[linkType];
 			window.open(this.project[linkType]);
+		},
+		handleClickNav(e) {
+			console.log(e.target.id, 'clicked');
+			let direction = e.target.id === 'prev' ? -1 : 1;
+			// e.target.classList.add(`pressed`);
+			this.switchProjects(null, direction);
 		},
 		cycleScreenshot(type, halt) {
 			let currentIndex = this.screenIndexes[type];
@@ -247,7 +267,8 @@ export default {
 			} else {
 				this.screenTimers[type] = setTimeout(() => {
 					this.cycleScreenshot(type);
-				}, 5000);
+					console.log('cycling!', this.project.name, this.$store.state.userOptions.screenshotCycleDuration)
+				}, this.$store.state.userOptions.screenshotCycleDuration);
 			}			
 		},
 		cycleDevice(direction) {
@@ -267,7 +288,7 @@ export default {
 </script>
 <style scoped>
 .project-card {
-	width: 100vw;
+	/* width: 100vw; */
 	height: var(--card-height);
 	min-height: 100vw;
 	max-height: var(--card-height);
@@ -285,7 +306,10 @@ export default {
 	color: var(--main-text-color);
 	transition: transform var(--shift-speed) ease, opacity var(--shift-speed) ease;
 	will-change: transform;
-	transform-origin: center;
+	/* transform-origin: center; */
+}
+.project-card.landscape {
+	border-top-left-radius: var(--arc-radius) !important;
 }
 #app:not(.spa) .project-card {
 	height: unset;
@@ -347,7 +371,7 @@ export default {
 	box-shadow: calc(var(--arc-radius) / 3) calc(var(--arc-radius) / -3) 0px var(--card-header-color);
 	border: 0;
 }
-#app.wavy .project-card {
+.project-card {
 	border-top-right-radius: var(--arc-radius);
 	border-bottom-left-radius: var(--arc-radius);
 }
@@ -358,6 +382,7 @@ a {
 	position: absolute;
 }
 .project-header {	
+	width: var(--body-width);
 	position: relative;
 	background: var(--card-header-color);
 	display: grid;
@@ -367,7 +392,11 @@ a {
 	justify-items: center;
 	font-size: var(--main-font-size);
 }
-#app.wavy .project-header {
+.landscape .project-header {
+	padding-left: calc(var(--header-height) /3);
+	border-top-left-radius: var(--arc-radius) !important;
+}
+.project-header {
 	border-radius: inherit;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
@@ -389,6 +418,8 @@ a {
 	border: calc(var(--inner-padding) / 3) solid var(--highlight-color);
 	border-radius: var(--inner-padding);
 	margin: 0 var(--inner-padding);
+	max-width: max-content;
+	
 }
 .project-link > * {
 	pointer-events: none;
@@ -400,9 +431,11 @@ a {
 	color: rgb(182, 228, 253);
 	text-align: right;
 	justify-content: flex-end;
+	padding-left: var(--main-padding);
 }
 .project-link:nth-of-type(2) {
 	color: rgb(182, 253, 202);
+	padding-right: var(--main-padding);
 }
 .project-link > img {
 	width: calc(var(--main-padding) * 2.25);
@@ -518,16 +551,19 @@ a {
 	position: relative;
 	width: var(--screenshot-area-width);
 	/* height: min-content; */
+	
 	max-width: 100vw;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
 	justify-self: center;
-	/* align-self:center; */
+	/* align-self: center; */
 	padding-top: var(--main-padding);
 }
 .card-footer {
 	/* margin: var(--inner-padding); */
+	max-width: var(--body-width);
+	height: calc(var(--header-height) * 1.2);
 	position: relative;
 	display: flex;
 	align-items: stretch;
@@ -535,55 +571,67 @@ a {
 	justify-self: center;
 	padding: var(--main-padding);
 	width: 100vw;
-	max-width: 100vw;
-	min-width: calc(var(--header-height * 3));
+	/* max-width: 100vw; */
+	/* min-width: calc(var(--header-height * 3)); */
 	background-color: var(--card-header-color);
 	border-bottom-left-radius: var(--arc-radius);
+}
+.landscape .card-footer, .landscape.project-card {
+	border-bottom-right-radius: var(--arc-radius);
 }
 .hidden {
 	opacity: 0;
 }
-@media screen and (orientation: landscape) {
+@media screen and (orientation: landscape) and (min-width: 768px) {
 	.project-card {
-		min-width: unset;
-		width: calc(var(--screenshot-area-height) * 1.75);
-		grid-template-rows: calc(var(--header-height) * 1.15) min-content var(
-				--screenshot-area-height
-			) min-content;
-		/* grid-template-rows: calc(var(--header-height) * 1.15) auto calc(var(--header-height) / 1.5) auto 1fr auto; */
-		/* grid-template-rows: calc(var(--header-height) * 1.15) auto calc(var(--header-height) / 1.5) var(--screenshot-area-height) 1fr; */
-		grid-template-columns: auto 1fr;
-		border-radius: var(--inner-padding);
+		position: absolute;
+		left: 0;
+		top: calc(var(--header-height) + var(--card-spacing));
+		min-width: 0;
+		max-width: var(--body-width);
+		min-height: unset;
 	}
-	.title-description {
-		grid-column-end: span 2;
+	.side-nav {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);		
+		height: var(--screenshot-area-height);
+		width: calc((var(--body-width) - var(--screenshot-area-width)) / 2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 3;
+		cursor: pointer;
 	}
-	.tech-area {
-		flex-direction: column;
-		align-items: flex-start;
-		padding-top: var(--main-padding);
-		grid-column-start: 1;
-		grid-row-start: 3;
-		grid-row-end: span 2;
+	.arrow {
+		/* pointer-events: none; */
+		border-bottom: calc(var(--header-height) / 2) solid transparent;
+		border-top: calc(var(--header-height) / 2) solid transparent;
+		opacity: 0.5;
+		z-index: 14;
+		cursor: pointer !important;
 	}
-	.tech-area > div {
-		margin-bottom: var(--inner-padding);
+	.arrow-stalk {
+		pointer-events: none;
+		width: calc(var(--header-height) / 1.5);
+		height: calc(var(--header-height) / 2);
+		background: var(--off-white);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.5;
 	}
-	.project-header {
-		border-top-right-radius: var(--inner-padding);
+	.arrow.left {
+		border-right: calc(var(--header-height) / 2) solid var(--off-white);
 	}
-	.project-link.clickable {
-		border-radius: calc(var(--inner-padding) / 2);
+	.arrow.right {		
+		border-left: calc(var(--header-height) / 2) solid var(--off-white);
 	}
-	.project-header,
-	.bullet-area {
-		grid-column-end: span 2;
+	.side-nav.left {
+		left: 0;
 	}
-	.card-footer {
-		grid-column-end: span 2;
-	}
-	#upper-left-piece, #lower-right-piece {
-		display: none;
+	.side-nav.right {
+		right: 0;
 	}
 }
 </style>
